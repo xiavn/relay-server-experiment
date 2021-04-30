@@ -12,7 +12,8 @@
       "baseUrl": ".",
       "strict": true,
       "forceConsistentCasingInFileNames": true,
-      "noFallthroughCasesInSwitch": true
+      "noFallthroughCasesInSwitch": true,
+      "outDir": "dist"
     },
     "include": ["src/**/*"],
     "exclude": ["node_modules", "dist", "**/*.spec.ts"]
