@@ -1,6 +1,6 @@
-const { ApolloServer } = require("apollo-server");
-const fs = require("fs");
-const path = require("path");
+import { ApolloServer } from "apollo-server";
+import fs from "fs";
+import path from "path";
 
 const links = [
     {
