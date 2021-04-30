@@ -1,32 +1,33 @@
 import { ApolloServer } from "apollo-server";
 import fs from "fs";
 import path from "path";
+import { PrismaClient } from "@prisma/client";
+import { Resolvers } from "./generated/graphql";
 
-const links = [
-    {
-        id: "link-0",
-        url: "www.howtographql.com",
-        description: "Fullstack tutorial for GraphQL",
-    },
-];
 
-let idCount = links.length;
+const prisma = new PrismaClient();
 
-const resolvers = {
+const context = {
+    prisma,
+}
+
+const resolver: Resolvers<typeof context> = {
     Query: {
         info: () => null,
-        feed: () => links,
+        feed: async (parent, args, context) => {
+            return context.prisma.link.findMany();
+        },
         link: (id) => links.find((link) => link.id === id),
     },
     Mutation: {
-        post: (parent, args) => {
-            const link = {
-                id: `link-${idCount++}`,
-                description: args.description,
-                url: args.url,
-            };
-            links.push(link);
-            return link;
+        post: (parent, args, context, info) => {
+            const newLink = context.prisma.link.create({
+                data: {
+                    description: args.description,
+                    url: args.url,
+                }
+            });
+            return newLink;
         },
         updateLink: (parent, args) => {
             const linkIndex = links.findIndex((link) => link.id === args.id);
@@ -52,6 +53,7 @@ const resolvers = {
 const server = new ApolloServer({
     typeDefs: fs.readFileSync(path.join(__dirname, "schema.graphql"), "utf8"),
     resolvers,
+    context,,
 });
 
 server.listen().then(({ url }) => console.log(`Server is running on ${url}`));
