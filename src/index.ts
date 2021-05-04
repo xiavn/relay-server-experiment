@@ -16,7 +16,12 @@ const resolvers: Resolvers = {
         feed: async (parent, args, context) => {
             return await context.prisma.link.findMany();
         },
-        // link: (id) => links.find((link) => link.id === id),
+        link: (parent, args, context) =>
+            context.prisma.link.findUnique({
+                where: {
+                    id: Number(args.id),
+                },
+            }),
     },
     Mutation: {
         post: (parent, args, context, info) => {
@@ -28,24 +33,28 @@ const resolvers: Resolvers = {
             });
             return newLink;
         },
-        // updateLink: (parent, args, context) => {
-        //     const linkIndex = context.prisma.link.update();
-        //     if (linkIndex > -1) {
-        //         const updatedLink = {
-        //             id: args.id,
-        //             url: args.url,
-        //             description: args.description,
-        //         };
-        //         links[linkIndex] = updatedLink;
-        //         return updatedLink;
-        //     }
-        // },
-        // deleteLink: (parent, args) => {
-        //     const linkIndex = links.findIndex((link) => link.id === args.id);
-        //     if (linkIndex > -1) {
-        //         links.splice(linkIndex, 1);
-        //     }
-        // },
+        updateLink: (parent, args, context) => {
+            const id = Number(args.id);
+            const link = context.prisma.link.update({
+                where: {
+                    id,
+                },
+                data: {
+                    ...args,
+                    id,
+                },
+            });
+            return link;
+        },
+        deleteLink: (parent, args, context) => {
+            const id = Number(args.id);
+            const removed = context.prisma.link.delete({
+                where: {
+                    id,
+                },
+            });
+            return removed;
+        },
     },
 };
 
