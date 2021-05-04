@@ -5,6 +5,10 @@ generates:
     src/generated/graphql.ts:
         config:
             useIndexSignature: true
+            contextType: "src/index#Context"
+            mapperTypeSuffix: Model
+            mappers:
+                Link: "@prisma/client/index.d#Link"
         plugins:
             - "typescript"
             - "typescript-resolvers"

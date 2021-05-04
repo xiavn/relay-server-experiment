@@ -15,6 +15,7 @@
     "@graphql-codegen/introspection": "1.18.2"
   },
   "scripts": {
+    "start": "yarn run ts-node src/index.ts",
     "generate": "graphql-codegen --config codegen.yml"
   }
 }
