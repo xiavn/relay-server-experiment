@@ -9,6 +9,7 @@ generates:
             mapperTypeSuffix: Model
             mappers:
                 Link: "@prisma/client/index.d#Link"
+                User: "@prisma/client/index.d#User"
         plugins:
             - "typescript"
             - "typescript-resolvers"

@@ -1,10 +1,11 @@
 import { GraphQLResolveInfo } from 'graphql';
-import { Link as LinkModel } from '@prisma/client/index.d';
+import { Link as LinkModel, User as UserModel } from '@prisma/client/index.d';
 import { Context } from 'src/index';
 export type Maybe<T> = T | null;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
+export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 export type RequireFields<T, K extends keyof T> = { [X in Exclude<keyof T, K>]?: T[X] } & { [P in K]-?: NonNullable<T[P]> };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
@@ -15,11 +16,18 @@ export type Scalars = {
   Float: number;
 };
 
+export type AuthPayload = {
+  __typename?: 'AuthPayload';
+  token?: Maybe<Scalars['String']>;
+  user?: Maybe<User>;
+};
+
 export type Link = {
   __typename?: 'Link';
   id: Scalars['ID'];
   description: Scalars['String'];
   url: Scalars['String'];
+  postedBy?: Maybe<User>;
 };
 
 export type Mutation = {
@@ -27,6 +35,8 @@ export type Mutation = {
   post: Link;
   updateLink?: Maybe<Link>;
   deleteLink?: Maybe<Link>;
+  signup?: Maybe<AuthPayload>;
+  login?: Maybe<AuthPayload>;
 };
 
 
@@ -47,6 +57,19 @@ export type MutationDeleteLinkArgs = {
   id: Scalars['ID'];
 };
 
+
+export type MutationSignupArgs = {
+  email: Scalars['String'];
+  password: Scalars['String'];
+  name: Scalars['String'];
+};
+
+
+export type MutationLoginArgs = {
+  email: Scalars['String'];
+  password: Scalars['String'];
+};
+
 export type Query = {
   __typename?: 'Query';
   info: Scalars['String'];
@@ -57,6 +80,14 @@ export type Query = {
 
 export type QueryLinkArgs = {
   id: Scalars['ID'];
+};
+
+export type User = {
+  __typename?: 'User';
+  id: Scalars['ID'];
+  name: Scalars['String'];
+  email: Scalars['String'];
+  links: Array<Link>;
 };
 
 export type WithIndex<TObject> = TObject & Record<string, any>;
@@ -138,28 +169,39 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = ResolversObject<{
+  AuthPayload: ResolverTypeWrapper<Omit<AuthPayload, 'user'> & { user?: Maybe<ResolversTypes['User']> }>;
+  String: ResolverTypeWrapper<Scalars['String']>;
   Link: ResolverTypeWrapper<LinkModel>;
   ID: ResolverTypeWrapper<Scalars['ID']>;
-  String: ResolverTypeWrapper<Scalars['String']>;
   Mutation: ResolverTypeWrapper<{}>;
   Query: ResolverTypeWrapper<{}>;
+  User: ResolverTypeWrapper<UserModel>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
 }>;
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = ResolversObject<{
+  AuthPayload: Omit<AuthPayload, 'user'> & { user?: Maybe<ResolversParentTypes['User']> };
+  String: Scalars['String'];
   Link: LinkModel;
   ID: Scalars['ID'];
-  String: Scalars['String'];
   Mutation: {};
   Query: {};
+  User: UserModel;
   Boolean: Scalars['Boolean'];
+}>;
+
+export type AuthPayloadResolvers<ContextType = Context, ParentType extends ResolversParentTypes['AuthPayload'] = ResolversParentTypes['AuthPayload']> = ResolversObject<{
+  token?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type LinkResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Link'] = ResolversParentTypes['Link']> = ResolversObject<{
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   description?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   url?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  postedBy?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -167,6 +209,8 @@ export type MutationResolvers<ContextType = Context, ParentType extends Resolver
   post?: Resolver<ResolversTypes['Link'], ParentType, ContextType, RequireFields<MutationPostArgs, 'url' | 'description'>>;
   updateLink?: Resolver<Maybe<ResolversTypes['Link']>, ParentType, ContextType, RequireFields<MutationUpdateLinkArgs, 'id'>>;
   deleteLink?: Resolver<Maybe<ResolversTypes['Link']>, ParentType, ContextType, RequireFields<MutationDeleteLinkArgs, 'id'>>;
+  signup?: Resolver<Maybe<ResolversTypes['AuthPayload']>, ParentType, ContextType, RequireFields<MutationSignupArgs, 'email' | 'password' | 'name'>>;
+  login?: Resolver<Maybe<ResolversTypes['AuthPayload']>, ParentType, ContextType, RequireFields<MutationLoginArgs, 'email' | 'password'>>;
 }>;
 
 export type QueryResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
@@ -175,10 +219,20 @@ export type QueryResolvers<ContextType = Context, ParentType extends ResolversPa
   link?: Resolver<Maybe<ResolversTypes['Link']>, ParentType, ContextType, RequireFields<QueryLinkArgs, 'id'>>;
 }>;
 
+export type UserResolvers<ContextType = Context, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = ResolversObject<{
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  email?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  links?: Resolver<Array<ResolversTypes['Link']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
 export type Resolvers<ContextType = Context> = ResolversObject<{
+  AuthPayload?: AuthPayloadResolvers<ContextType>;
   Link?: LinkResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
+  User?: UserResolvers<ContextType>;
 }>;
 
 
