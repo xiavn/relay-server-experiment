@@ -1,6 +1,7 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { MutationResolvers } from "src/generated/graphql";
+import { APP_SECRET } from "src/utils";
 
 const mutationResolvers: MutationResolvers = {
     post: async (parent, args, context, info) => {
