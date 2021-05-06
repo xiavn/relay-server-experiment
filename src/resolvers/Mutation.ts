@@ -13,9 +13,9 @@ const mutationResolvers: MutationResolvers = {
             },
         });
     },
-    updateLink: (parent, args, context) => {
+    updateLink: async (parent, args, context) => {
         const id = Number(args.id);
-        const link = context.prisma.link.update({
+        const link = await context.prisma.link.update({
             where: {
                 id,
             },
@@ -26,9 +26,9 @@ const mutationResolvers: MutationResolvers = {
         });
         return link;
     },
-    deleteLink: (parent, args, context) => {
+    deleteLink: async (parent, args, context) => {
         const id = Number(args.id);
-        const removed = context.prisma.link.delete({
+        const removed = await context.prisma.link.delete({
             where: {
                 id,
             },
