@@ -82,6 +82,11 @@ export type QueryLinkArgs = {
   id: Scalars['ID'];
 };
 
+export type Subscription = {
+  __typename?: 'Subscription';
+  newLink?: Maybe<Link>;
+};
+
 export type User = {
   __typename?: 'User';
   id: Scalars['ID'];
@@ -175,6 +180,7 @@ export type ResolversTypes = ResolversObject<{
   ID: ResolverTypeWrapper<Scalars['ID']>;
   Mutation: ResolverTypeWrapper<{}>;
   Query: ResolverTypeWrapper<{}>;
+  Subscription: ResolverTypeWrapper<{}>;
   User: ResolverTypeWrapper<UserModel>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
 }>;
@@ -187,6 +193,7 @@ export type ResolversParentTypes = ResolversObject<{
   ID: Scalars['ID'];
   Mutation: {};
   Query: {};
+  Subscription: {};
   User: UserModel;
   Boolean: Scalars['Boolean'];
 }>;
@@ -219,6 +226,10 @@ export type QueryResolvers<ContextType = Context, ParentType extends ResolversPa
   link?: Resolver<Maybe<ResolversTypes['Link']>, ParentType, ContextType, RequireFields<QueryLinkArgs, 'id'>>;
 }>;
 
+export type SubscriptionResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']> = ResolversObject<{
+  newLink?: SubscriptionResolver<Maybe<ResolversTypes['Link']>, "newLink", ParentType, ContextType>;
+}>;
+
 export type UserResolvers<ContextType = Context, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = ResolversObject<{
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
@@ -232,6 +243,7 @@ export type Resolvers<ContextType = Context> = ResolversObject<{
   Link?: LinkResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
+  Subscription?: SubscriptionResolvers<ContextType>;
   User?: UserResolvers<ContextType>;
 }>;
 

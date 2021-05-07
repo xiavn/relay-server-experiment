@@ -6,13 +6,15 @@ import { APP_SECRET } from "src/utils";
 const mutationResolvers: MutationResolvers = {
     post: async (parent, args, context, info) => {
         const { userId } = context;
-        return await context.prisma.link.create({
+        const newLink = await context.prisma.link.create({
             data: {
                 description: args.description,
                 url: args.url,
                 postedBy: { connect: { id: Number(userId) } },
             },
         });
+        context.pubsub.publish("NEW_LINK", newLink);
+        return newLink;
     },
     updateLink: async (parent, args, context) => {
         const id = Number(args.id);
