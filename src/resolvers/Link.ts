@@ -6,6 +6,11 @@ const linkResolvers: LinkResolvers = {
             .findUnique({ where: { id: parent.id } })
             .postedBy();
     },
+    votes: async (parent, args, context) => {
+        return await context.prisma.link
+            .findUnique({ where: { id: parent.id } })
+            .votes();
+    },
 };
 
 export default linkResolvers;

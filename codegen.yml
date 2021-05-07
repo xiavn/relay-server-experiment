@@ -10,6 +10,7 @@ generates:
             mappers:
                 Link: "@prisma/client/index.d#Link"
                 User: "@prisma/client/index.d#User"
+                Vote: "@prisma/client/index.d#Vote"
         plugins:
             - "typescript"
             - "typescript-resolvers"
