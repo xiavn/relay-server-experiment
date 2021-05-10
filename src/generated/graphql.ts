@@ -92,6 +92,7 @@ export type QueryLinkArgs = {
 export type Subscription = {
   __typename?: 'Subscription';
   newLink?: Maybe<Link>;
+  newVote?: Maybe<Vote>;
 };
 
 export type User = {
@@ -105,8 +106,8 @@ export type User = {
 export type Vote = {
   __typename?: 'Vote';
   id: Scalars['ID'];
-  link: Link;
-  user: User;
+  link?: Maybe<Link>;
+  user?: Maybe<User>;
 };
 
 export type WithIndex<TObject> = TObject & Record<string, any>;
@@ -246,6 +247,7 @@ export type QueryResolvers<ContextType = Context, ParentType extends ResolversPa
 
 export type SubscriptionResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']> = ResolversObject<{
   newLink?: SubscriptionResolver<Maybe<ResolversTypes['Link']>, "newLink", ParentType, ContextType>;
+  newVote?: SubscriptionResolver<Maybe<ResolversTypes['Vote']>, "newVote", ParentType, ContextType>;
 }>;
 
 export type UserResolvers<ContextType = Context, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = ResolversObject<{
@@ -258,8 +260,8 @@ export type UserResolvers<ContextType = Context, ParentType extends ResolversPar
 
 export type VoteResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Vote'] = ResolversParentTypes['Vote']> = ResolversObject<{
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  link?: Resolver<ResolversTypes['Link'], ParentType, ContextType>;
-  user?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
+  link?: Resolver<Maybe<ResolversTypes['Link']>, ParentType, ContextType>;
+  user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 

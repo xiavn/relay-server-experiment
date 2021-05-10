@@ -7,6 +7,7 @@ import Mutation from "src/resolvers/Mutation";
 import Link from "src/resolvers/Link";
 import User from "src/resolvers/User";
 import Subscription from "src/resolvers/Subscription";
+import Vote from "src/resolvers/Vote";
 import { getUserId } from "./utils";
 
 const prisma = new PrismaClient();
@@ -23,6 +24,7 @@ const resolvers = {
     Mutation,
     Link,
     User,
+    Vote,
     Subscription,
 };
 
