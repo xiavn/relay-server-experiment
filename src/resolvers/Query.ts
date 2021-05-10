@@ -5,8 +5,8 @@ const queryResolvers: QueryResolvers = {
     feed: async (parent, args, context) => {
         return await context.prisma.link.findMany();
     },
-    link: (parent, args, context) =>
-        context.prisma.link.findUnique({
+    link: async (parent, args, context) =>
+        await context.prisma.link.findUnique({
             where: {
                 id: Number(args.id),
             },
