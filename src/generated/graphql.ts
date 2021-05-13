@@ -22,6 +22,12 @@ export type AuthPayload = {
   user?: Maybe<User>;
 };
 
+export type Feed = {
+  __typename?: 'Feed';
+  links: Array<Link>;
+  count: Scalars['Int'];
+};
+
 export type Link = {
   __typename?: 'Link';
   id: Scalars['ID'];
@@ -30,6 +36,17 @@ export type Link = {
   postedBy?: Maybe<User>;
   votes: Array<Vote>;
 };
+
+export type LinkOrderByInput = {
+  parameter: LinkOrderByInputParam;
+  direction: Sort;
+};
+
+export enum LinkOrderByInputParam {
+  Description = 'description',
+  Url = 'url',
+  CreatedAt = 'createdAt'
+}
 
 export type Mutation = {
   __typename?: 'Mutation';
@@ -80,19 +97,27 @@ export type MutationVoteArgs = {
 export type Query = {
   __typename?: 'Query';
   info: Scalars['String'];
-  feed: Array<Link>;
+  feed: Feed;
   link?: Maybe<Link>;
 };
 
 
 export type QueryFeedArgs = {
   filter?: Maybe<Scalars['String']>;
+  skip?: Maybe<Scalars['Int']>;
+  take?: Maybe<Scalars['Int']>;
+  orderBy?: Maybe<LinkOrderByInput>;
 };
 
 
 export type QueryLinkArgs = {
   id: Scalars['ID'];
 };
+
+export enum Sort {
+  Asc = 'asc',
+  Desc = 'desc'
+}
 
 export type Subscription = {
   __typename?: 'Subscription';
@@ -196,10 +221,15 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 export type ResolversTypes = ResolversObject<{
   AuthPayload: ResolverTypeWrapper<Omit<AuthPayload, 'user'> & { user?: Maybe<ResolversTypes['User']> }>;
   String: ResolverTypeWrapper<Scalars['String']>;
+  Feed: ResolverTypeWrapper<Omit<Feed, 'links'> & { links: Array<ResolversTypes['Link']> }>;
+  Int: ResolverTypeWrapper<Scalars['Int']>;
   Link: ResolverTypeWrapper<LinkModel>;
   ID: ResolverTypeWrapper<Scalars['ID']>;
+  LinkOrderByInput: LinkOrderByInput;
+  LinkOrderByInputParam: LinkOrderByInputParam;
   Mutation: ResolverTypeWrapper<{}>;
   Query: ResolverTypeWrapper<{}>;
+  Sort: Sort;
   Subscription: ResolverTypeWrapper<{}>;
   User: ResolverTypeWrapper<UserModel>;
   Vote: ResolverTypeWrapper<VoteModel>;
@@ -210,8 +240,11 @@ export type ResolversTypes = ResolversObject<{
 export type ResolversParentTypes = ResolversObject<{
   AuthPayload: Omit<AuthPayload, 'user'> & { user?: Maybe<ResolversParentTypes['User']> };
   String: Scalars['String'];
+  Feed: Omit<Feed, 'links'> & { links: Array<ResolversParentTypes['Link']> };
+  Int: Scalars['Int'];
   Link: LinkModel;
   ID: Scalars['ID'];
+  LinkOrderByInput: LinkOrderByInput;
   Mutation: {};
   Query: {};
   Subscription: {};
@@ -223,6 +256,12 @@ export type ResolversParentTypes = ResolversObject<{
 export type AuthPayloadResolvers<ContextType = Context, ParentType extends ResolversParentTypes['AuthPayload'] = ResolversParentTypes['AuthPayload']> = ResolversObject<{
   token?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type FeedResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Feed'] = ResolversParentTypes['Feed']> = ResolversObject<{
+  links?: Resolver<Array<ResolversTypes['Link']>, ParentType, ContextType>;
+  count?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -246,7 +285,7 @@ export type MutationResolvers<ContextType = Context, ParentType extends Resolver
 
 export type QueryResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
   info?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  feed?: Resolver<Array<ResolversTypes['Link']>, ParentType, ContextType, RequireFields<QueryFeedArgs, never>>;
+  feed?: Resolver<ResolversTypes['Feed'], ParentType, ContextType, RequireFields<QueryFeedArgs, never>>;
   link?: Resolver<Maybe<ResolversTypes['Link']>, ParentType, ContextType, RequireFields<QueryLinkArgs, 'id'>>;
 }>;
 
@@ -272,6 +311,7 @@ export type VoteResolvers<ContextType = Context, ParentType extends ResolversPar
 
 export type Resolvers<ContextType = Context> = ResolversObject<{
   AuthPayload?: AuthPayloadResolvers<ContextType>;
+  Feed?: FeedResolvers<ContextType>;
   Link?: LinkResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
