@@ -5,7 +5,6 @@ export type Maybe<T> = T | null;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
-export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 export type RequireFields<T, K extends keyof T> = { [X in Exclude<keyof T, K>]?: T[X] } & { [P in K]-?: NonNullable<T[P]> };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
@@ -16,128 +15,21 @@ export type Scalars = {
   Float: number;
 };
 
-export type AuthPayload = {
-  __typename?: 'AuthPayload';
-  token?: Maybe<Scalars['String']>;
-  user?: Maybe<User>;
-};
-
-export type Feed = {
-  __typename?: 'Feed';
-  links: Array<Link>;
-  count: Scalars['Int'];
-};
-
-export type Link = {
-  __typename?: 'Link';
+/** An object with an ID */
+export type Node = {
+  /** The id of the object. */
   id: Scalars['ID'];
-  description: Scalars['String'];
-  url: Scalars['String'];
-  postedBy?: Maybe<User>;
-  votes: Array<Vote>;
-};
-
-export type LinkOrderByInput = {
-  parameter: LinkOrderByInputParam;
-  direction: Sort;
-};
-
-export enum LinkOrderByInputParam {
-  Description = 'description',
-  Url = 'url',
-  CreatedAt = 'createdAt'
-}
-
-export type Mutation = {
-  __typename?: 'Mutation';
-  post: Link;
-  updateLink?: Maybe<Link>;
-  deleteLink?: Maybe<Link>;
-  signup?: Maybe<AuthPayload>;
-  login?: Maybe<AuthPayload>;
-  vote?: Maybe<Vote>;
-};
-
-
-export type MutationPostArgs = {
-  url: Scalars['String'];
-  description: Scalars['String'];
-};
-
-
-export type MutationUpdateLinkArgs = {
-  id: Scalars['ID'];
-  url?: Maybe<Scalars['String']>;
-  description?: Maybe<Scalars['String']>;
-};
-
-
-export type MutationDeleteLinkArgs = {
-  id: Scalars['ID'];
-};
-
-
-export type MutationSignupArgs = {
-  email: Scalars['String'];
-  password: Scalars['String'];
-  name: Scalars['String'];
-};
-
-
-export type MutationLoginArgs = {
-  email: Scalars['String'];
-  password: Scalars['String'];
-};
-
-
-export type MutationVoteArgs = {
-  linkId: Scalars['ID'];
 };
 
 export type Query = {
   __typename?: 'Query';
-  info: Scalars['String'];
-  feed: Feed;
-  link?: Maybe<Link>;
+  /** Fetches an object given its ID */
+  node?: Maybe<Node>;
 };
 
 
-export type QueryFeedArgs = {
-  filter?: Maybe<Scalars['String']>;
-  skip?: Maybe<Scalars['Int']>;
-  take?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<LinkOrderByInput>;
-};
-
-
-export type QueryLinkArgs = {
+export type QueryNodeArgs = {
   id: Scalars['ID'];
-};
-
-export enum Sort {
-  Asc = 'asc',
-  Desc = 'desc'
-}
-
-export type Subscription = {
-  __typename?: 'Subscription';
-  newLink?: Maybe<Link>;
-  newVote?: Maybe<Vote>;
-};
-
-export type User = {
-  __typename?: 'User';
-  id: Scalars['ID'];
-  name: Scalars['String'];
-  email: Scalars['String'];
-  links: Array<Link>;
-};
-
-export type Vote = {
-  __typename?: 'Vote';
-  id: Scalars['ID'];
-  link?: Maybe<Link>;
-  user?: Maybe<User>;
 };
 
 export type WithIndex<TObject> = TObject & Record<string, any>;
@@ -219,105 +111,34 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = ResolversObject<{
-  AuthPayload: ResolverTypeWrapper<Omit<AuthPayload, 'user'> & { user?: Maybe<ResolversTypes['User']> }>;
-  String: ResolverTypeWrapper<Scalars['String']>;
-  Feed: ResolverTypeWrapper<Omit<Feed, 'links'> & { links: Array<ResolversTypes['Link']> }>;
-  Int: ResolverTypeWrapper<Scalars['Int']>;
-  Link: ResolverTypeWrapper<LinkModel>;
+  Node: never;
   ID: ResolverTypeWrapper<Scalars['ID']>;
-  LinkOrderByInput: LinkOrderByInput;
-  LinkOrderByInputParam: LinkOrderByInputParam;
-  Mutation: ResolverTypeWrapper<{}>;
   Query: ResolverTypeWrapper<{}>;
-  Sort: Sort;
-  Subscription: ResolverTypeWrapper<{}>;
-  User: ResolverTypeWrapper<UserModel>;
-  Vote: ResolverTypeWrapper<VoteModel>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
+  String: ResolverTypeWrapper<Scalars['String']>;
 }>;
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = ResolversObject<{
-  AuthPayload: Omit<AuthPayload, 'user'> & { user?: Maybe<ResolversParentTypes['User']> };
-  String: Scalars['String'];
-  Feed: Omit<Feed, 'links'> & { links: Array<ResolversParentTypes['Link']> };
-  Int: Scalars['Int'];
-  Link: LinkModel;
+  Node: never;
   ID: Scalars['ID'];
-  LinkOrderByInput: LinkOrderByInput;
-  Mutation: {};
   Query: {};
-  Subscription: {};
-  User: UserModel;
-  Vote: VoteModel;
   Boolean: Scalars['Boolean'];
+  String: Scalars['String'];
 }>;
 
-export type AuthPayloadResolvers<ContextType = Context, ParentType extends ResolversParentTypes['AuthPayload'] = ResolversParentTypes['AuthPayload']> = ResolversObject<{
-  token?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-}>;
-
-export type FeedResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Feed'] = ResolversParentTypes['Feed']> = ResolversObject<{
-  links?: Resolver<Array<ResolversTypes['Link']>, ParentType, ContextType>;
-  count?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-}>;
-
-export type LinkResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Link'] = ResolversParentTypes['Link']> = ResolversObject<{
+export type NodeResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Node'] = ResolversParentTypes['Node']> = ResolversObject<{
+  __resolveType: TypeResolveFn<null, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  description?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  url?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  postedBy?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
-  votes?: Resolver<Array<ResolversTypes['Vote']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-}>;
-
-export type MutationResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = ResolversObject<{
-  post?: Resolver<ResolversTypes['Link'], ParentType, ContextType, RequireFields<MutationPostArgs, 'url' | 'description'>>;
-  updateLink?: Resolver<Maybe<ResolversTypes['Link']>, ParentType, ContextType, RequireFields<MutationUpdateLinkArgs, 'id'>>;
-  deleteLink?: Resolver<Maybe<ResolversTypes['Link']>, ParentType, ContextType, RequireFields<MutationDeleteLinkArgs, 'id'>>;
-  signup?: Resolver<Maybe<ResolversTypes['AuthPayload']>, ParentType, ContextType, RequireFields<MutationSignupArgs, 'email' | 'password' | 'name'>>;
-  login?: Resolver<Maybe<ResolversTypes['AuthPayload']>, ParentType, ContextType, RequireFields<MutationLoginArgs, 'email' | 'password'>>;
-  vote?: Resolver<Maybe<ResolversTypes['Vote']>, ParentType, ContextType, RequireFields<MutationVoteArgs, 'linkId'>>;
 }>;
 
 export type QueryResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
-  info?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  feed?: Resolver<ResolversTypes['Feed'], ParentType, ContextType, RequireFields<QueryFeedArgs, never>>;
-  link?: Resolver<Maybe<ResolversTypes['Link']>, ParentType, ContextType, RequireFields<QueryLinkArgs, 'id'>>;
-}>;
-
-export type SubscriptionResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']> = ResolversObject<{
-  newLink?: SubscriptionResolver<Maybe<ResolversTypes['Link']>, "newLink", ParentType, ContextType>;
-  newVote?: SubscriptionResolver<Maybe<ResolversTypes['Vote']>, "newVote", ParentType, ContextType>;
-}>;
-
-export type UserResolvers<ContextType = Context, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = ResolversObject<{
-  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  email?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  links?: Resolver<Array<ResolversTypes['Link']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-}>;
-
-export type VoteResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Vote'] = ResolversParentTypes['Vote']> = ResolversObject<{
-  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  link?: Resolver<Maybe<ResolversTypes['Link']>, ParentType, ContextType>;
-  user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+  node?: Resolver<Maybe<ResolversTypes['Node']>, ParentType, ContextType, RequireFields<QueryNodeArgs, 'id'>>;
 }>;
 
 export type Resolvers<ContextType = Context> = ResolversObject<{
-  AuthPayload?: AuthPayloadResolvers<ContextType>;
-  Feed?: FeedResolvers<ContextType>;
-  Link?: LinkResolvers<ContextType>;
-  Mutation?: MutationResolvers<ContextType>;
+  Node?: NodeResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
-  Subscription?: SubscriptionResolvers<ContextType>;
-  User?: UserResolvers<ContextType>;
-  Vote?: VoteResolvers<ContextType>;
 }>;
 
 

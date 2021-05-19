@@ -1,14 +1,15 @@
 import { ApolloServer, PubSub } from "apollo-server";
-import fs from "fs";
-import path from "path";
+// import fs from "fs";
+// import path from "path";
 import { PrismaClient } from "@prisma/client";
-import Query from "src/resolvers/Query";
-import Mutation from "src/resolvers/Mutation";
-import Link from "src/resolvers/Link";
-import User from "src/resolvers/User";
-import Subscription from "src/resolvers/Subscription";
-import Vote from "src/resolvers/Vote";
+// import Query from "src/resolvers/Query";
+// import Mutation from "src/resolvers/Mutation";
+// import Link from "src/resolvers/Link";
+// import User from "src/resolvers/User";
+// import Subscription from "src/resolvers/Subscription";
+// import Vote from "src/resolvers/Vote";
 import { getUserId } from "./utils";
+import schema from "./schema";
 
 const prisma = new PrismaClient();
 const pubsub = new PubSub();
@@ -19,18 +20,19 @@ export type Context = {
     userId: string | null;
 };
 
-const resolvers = {
-    Query,
-    Mutation,
-    Link,
-    User,
-    Vote,
-    Subscription,
-};
+// const resolvers = {
+//     Query,
+//     Mutation,
+//     Link,
+//     User,
+//     Vote,
+//     Subscription,
+// };
 
 const server = new ApolloServer({
-    typeDefs: fs.readFileSync(path.join(__dirname, "schema.graphql"), "utf8"),
-    resolvers,
+    // typeDefs: fs.readFileSync(path.join(__dirname, "schema.graphql"), "utf8"),
+    // resolvers,
+    schema,
     context: ({ req }) => ({
         ...req,
         prisma,
@@ -42,4 +44,6 @@ const server = new ApolloServer({
     }),
 });
 
-server.listen().then(({ url }) => console.log(`Server is running on ${url}`));
+server
+    .listen()
+    .then(({ url }) => console.log(`🚀 Server is running on ${url}`));

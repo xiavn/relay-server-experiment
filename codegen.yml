@@ -1,6 +1,8 @@
 overwrite: true
-schema: "src/schema.graphql"
+schema: "src/schema/index.ts"
 documents: null
+require:
+    - ts-node/register
 generates:
     src/generated/graphql.ts:
         config:
