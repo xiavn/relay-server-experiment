@@ -2,6 +2,7 @@ import { buildSchema, GraphQLObjectType, GraphQLSchema } from "graphql";
 import { makeSchema } from "nexus";
 import { join } from "path";
 import { nodeField } from "./node";
+import * as types from "./types";
 
 // const query = new GraphQLObjectType({
 //     name: "Query",
@@ -16,7 +17,7 @@ import { nodeField } from "./node";
 // });
 
 const schema = makeSchema({
-    types: [],
+    types,
     outputs: {
         typegen: join(__dirname, "..", "nexus-typegen.ts"),
         schema: join(__dirname, "..", "schema.graphql"),

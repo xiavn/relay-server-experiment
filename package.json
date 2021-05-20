@@ -23,6 +23,8 @@
   },
   "scripts": {
     "start": "ts-node-dev --transpile-only --no-notify src/index.ts",
-    "generate": "graphql-codegen --config codegen.yml && prisma generate"
+    "generate": "graphql-codegen --config codegen.yml && prisma generate",
+    "typecheck": "tsc --noEmit --watch",
+    "build": "tsc"
   }
 }
