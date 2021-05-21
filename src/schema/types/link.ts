@@ -63,5 +63,19 @@ export const linkMutation = extendType({
                 return link;
             },
         });
+        t.nonNull.field('deleteLink', {
+            type: 'Link',
+            args: {
+                id: nonNull(intArg()),
+            },
+            resolve: async (_root, args, ctx) => {
+                const removed = await ctx.prisma.link.delete({
+                    where: {
+                        id: args.id,
+                    },
+                });
+                return removed;
+            },
+        });
     },
 });
