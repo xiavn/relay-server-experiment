@@ -22,8 +22,8 @@
     "tsconfig-paths": "^3.9.0"
   },
   "scripts": {
-    "start": "ts-node-dev --transpile-only --no-notify src/index.ts",
-    "generate": "graphql-codegen --config codegen.yml && prisma generate",
+    "start": "ts-node-dev --transpile-only --no-notify -r tsconfig-paths/register src/index.ts",
+    "generate": "prisma generate",
     "typecheck": "tsc --noEmit --watch",
     "build": "tsc"
   }

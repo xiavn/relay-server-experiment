@@ -34,9 +34,7 @@ import { userType } from "../user";
 export const linkType = objectType({
     name: "Link",
     definition(t) {
-        t.nonNull.id("id"),
-            t.nonNull.string("description"),
-            t.nonNull.string("url");
+        t.nonNull.int("id"), t.string("description"), t.string("url");
     },
 });
 
@@ -45,14 +43,9 @@ export const linkQuery = extendType({
     definition(t) {
         t.nonNull.list.field("feed", {
             type: "Link",
-            resolve() {
-                return [
-                    {
-                        id: "1",
-                        description: "Blah, blah, blah...",
-                        url: "www.test.com",
-                    },
-                ];
+            resolve: async (_root, _args, ctx) => {
+                const links = await ctx.prisma.link.findMany();
+                return links;
             },
         });
     },

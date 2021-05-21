@@ -4,7 +4,7 @@
  */
 
 
-
+import { Context } from "./schema/context"
 
 
 
@@ -29,9 +29,9 @@ export interface NexusGenScalars {
 
 export interface NexusGenObjects {
   Link: { // root type
-    description: string; // String!
-    id: string; // ID!
-    url: string; // String!
+    description?: string | null; // String
+    id: number; // Int!
+    url?: string | null; // String
   }
   Query: {};
 }
@@ -48,9 +48,9 @@ export type NexusGenAllTypes = NexusGenRootTypes & NexusGenScalars
 
 export interface NexusGenFieldTypes {
   Link: { // field return type
-    description: string; // String!
-    id: string; // ID!
-    url: string; // String!
+    description: string | null; // String
+    id: number; // Int!
+    url: string | null; // String
   }
   Query: { // field return type
     feed: Array<NexusGenRootTypes['Link'] | null>; // [Link]!
@@ -60,7 +60,7 @@ export interface NexusGenFieldTypes {
 export interface NexusGenFieldTypeNames {
   Link: { // field return type name
     description: 'String'
-    id: 'ID'
+    id: 'Int'
     url: 'String'
   }
   Query: { // field return type name
@@ -102,7 +102,7 @@ export type NexusGenFeaturesConfig = {
 }
 
 export interface NexusGenTypes {
-  context: any;
+  context: Context;
   inputTypes: NexusGenInputs;
   rootTypes: NexusGenRootTypes;
   inputTypeShapes: NexusGenInputs & NexusGenEnums & NexusGenScalars;
