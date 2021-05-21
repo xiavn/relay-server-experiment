@@ -33,6 +33,7 @@ export interface NexusGenObjects {
     id: number; // Int!
     url?: string | null; // String
   }
+  Mutation: {};
   Query: {};
 }
 
@@ -52,6 +53,9 @@ export interface NexusGenFieldTypes {
     id: number; // Int!
     url: string | null; // String
   }
+  Mutation: { // field return type
+    createLink: NexusGenRootTypes['Link']; // Link!
+  }
   Query: { // field return type
     feed: Array<NexusGenRootTypes['Link'] | null>; // [Link]!
   }
@@ -63,12 +67,21 @@ export interface NexusGenFieldTypeNames {
     id: 'Int'
     url: 'String'
   }
+  Mutation: { // field return type name
+    createLink: 'Link'
+  }
   Query: { // field return type name
     feed: 'Link'
   }
 }
 
 export interface NexusGenArgTypes {
+  Mutation: {
+    createLink: { // args
+      description: string; // String!
+      url: string; // String!
+    }
+  }
 }
 
 export interface NexusGenAbstractTypeMembers {
