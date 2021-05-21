@@ -4,15 +4,6 @@ import { MutationResolvers } from 'src/generated/graphql';
 import { APP_SECRET, getUserId } from 'src/utils';
 
 const mutationResolvers: MutationResolvers = {
-    deleteLink: async (parent, args, context) => {
-        const id = Number(args.id);
-        const removed = await context.prisma.link.delete({
-            where: {
-                id,
-            },
-        });
-        return removed;
-    },
     signup: async (parent, args, context, info) => {
         const password = await bcrypt.hash(args.password, 10);
         const user = await context.prisma.user.create({
