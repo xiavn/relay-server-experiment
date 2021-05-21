@@ -4,31 +4,6 @@ import { MutationResolvers } from "src/generated/graphql";
 import { APP_SECRET, getUserId } from "src/utils";
 
 const mutationResolvers: MutationResolvers = {
-    post: async (parent, args, context, info) => {
-        const { userId } = context;
-        const newLink = await context.prisma.link.create({
-            data: {
-                description: args.description,
-                url: args.url,
-                postedBy: { connect: { id: Number(userId) } },
-            },
-        });
-        context.pubsub.publish("NEW_LINK", newLink);
-        return newLink;
-    },
-    updateLink: async (parent, args, context) => {
-        const id = Number(args.id);
-        const link = await context.prisma.link.update({
-            where: {
-                id,
-            },
-            data: {
-                ...args,
-                id,
-            },
-        });
-        return link;
-    },
     deleteLink: async (parent, args, context) => {
         const id = Number(args.id);
         const removed = await context.prisma.link.delete({
