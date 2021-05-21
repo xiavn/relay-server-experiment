@@ -1,4 +1,4 @@
-import { UserResolvers } from "src/generated/graphql";
+import { UserResolvers } from 'src/generated/graphql';
 
 const userResolvers: UserResolvers = {
     links: async (parent, args, context) => {

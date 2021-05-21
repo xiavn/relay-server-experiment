@@ -1,23 +1,23 @@
 {
     "compilerOptions": {
-      "lib": ["es2016", "esnext.asynciterable"],
-      "target": "esnext",
-      "module": "commonjs",
-      "moduleResolution": "node",
-      "sourceMap": true,
-      "experimentalDecorators": true,
-      "emitDecoratorMetadata": true,
-      "esModuleInterop": true,
-      "resolveJsonModule": true,
-      "baseUrl": ".",
-      "strict": true,
-      "forceConsistentCasingInFileNames": true,
-      "noFallthroughCasesInSwitch": true,
-      "outDir": "dist",
-      "paths": {
-        "*": ["*"]
-      }
+        "lib": ["es2016", "esnext.asynciterable"],
+        "target": "esnext",
+        "module": "commonjs",
+        "moduleResolution": "node",
+        "sourceMap": true,
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true,
+        "esModuleInterop": true,
+        "resolveJsonModule": true,
+        "baseUrl": ".",
+        "strict": true,
+        "forceConsistentCasingInFileNames": true,
+        "noFallthroughCasesInSwitch": true,
+        "outDir": "dist",
+        "paths": {
+            "*": ["*"]
+        }
     },
     "include": ["src/**/*"],
     "exclude": ["node_modules", "dist", "**/*.spec.ts"]
-  }
+}

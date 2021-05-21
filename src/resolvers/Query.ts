@@ -1,7 +1,7 @@
-import { QueryResolvers } from "../generated/graphql";
+import { QueryResolvers } from '../generated/graphql';
 
 const queryResolvers: QueryResolvers = {
-    info: () => "This is a string",
+    info: () => 'This is a string',
     feed: async (parent, args, context) => {
         const where = args.filter
             ? {

@@ -1,4 +1,4 @@
-import { LinkResolvers } from "src/generated/graphql";
+import { LinkResolvers } from 'src/generated/graphql';
 
 const linkResolvers: LinkResolvers = {
     postedBy: async (parent, args, context) => {

@@ -1,8 +1,8 @@
-import { GraphQLNonNull, GraphQLObjectType, GraphQLString } from "graphql";
-import { connectionDefinitions, globalIdField } from "graphql-relay";
+import { GraphQLNonNull, GraphQLObjectType, GraphQLString } from 'graphql';
+import { connectionDefinitions, globalIdField } from 'graphql-relay';
 
 export const userType = new GraphQLObjectType({
-    name: "User",
+    name: 'User',
     fields: {
         id: globalIdField(),
         name: {

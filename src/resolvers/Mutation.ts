@@ -1,7 +1,7 @@
-import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
-import { MutationResolvers } from "src/generated/graphql";
-import { APP_SECRET, getUserId } from "src/utils";
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
+import { MutationResolvers } from 'src/generated/graphql';
+import { APP_SECRET, getUserId } from 'src/utils';
 
 const mutationResolvers: MutationResolvers = {
     deleteLink: async (parent, args, context) => {
@@ -26,12 +26,12 @@ const mutationResolvers: MutationResolvers = {
             where: { email: args.email },
         });
         if (!user) {
-            throw new Error("No user found");
+            throw new Error('No user found');
         }
 
         const valid = await bcrypt.compare(args.password, user.password);
         if (!valid) {
-            throw new Error("Invalid password");
+            throw new Error('Invalid password');
         }
 
         const token = jwt.sign({ userId: user.id }, APP_SECRET);
@@ -60,7 +60,7 @@ const mutationResolvers: MutationResolvers = {
                 link: { connect: { id: Number(args.linkId) } },
             },
         });
-        context.pubsub.publish("NEW_VOTE", newVote);
+        context.pubsub.publish('NEW_VOTE', newVote);
         return newVote;
     },
 };

@@ -1,4 +1,4 @@
-import { VoteResolvers } from "src/generated/graphql";
+import { VoteResolvers } from 'src/generated/graphql';
 
 const voteResolvers: VoteResolvers = {
     link: async (parent, args, context) => {

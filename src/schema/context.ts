@@ -1,8 +1,8 @@
-import { PrismaClient } from "@prisma/client";
-import { PubSub } from "apollo-server";
-import { ContextFunction } from "apollo-server-core";
-import { ExpressContext } from "apollo-server-express";
-import { getUserId } from "src/utils";
+import { PrismaClient } from '@prisma/client';
+import { PubSub } from 'apollo-server';
+import { ContextFunction } from 'apollo-server-core';
+import { ExpressContext } from 'apollo-server-express';
+import { getUserId } from 'src/utils';
 
 const prisma = new PrismaClient();
 const pubsub = new PubSub();
