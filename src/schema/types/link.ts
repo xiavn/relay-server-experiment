@@ -14,6 +14,14 @@ export const linkType = objectType({
                         .postedBy();
                 },
             });
+        t.nonNull.list.nonNull.field('votes', {
+            type: 'Vote',
+            resolve: async (root, _args, ctx) => {
+                return await ctx.prisma.link
+                    .findUnique({ where: { id: root.id } })
+                    .votes();
+            },
+        });
     },
 });
 

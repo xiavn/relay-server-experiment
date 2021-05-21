@@ -6,7 +6,7 @@ export const userType = objectType({
         t.nonNull.int('id'),
             t.nonNull.string('name'),
             t.nonNull.string('email'),
-            t.nonNull.list.field('links', {
+            t.nonNull.list.nonNull.field('links', {
                 type: 'Link',
                 resolve: async (root, args, ctx) => {
                     return await ctx.prisma.user
