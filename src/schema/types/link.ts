@@ -27,6 +27,19 @@ export const linkQuery = extendType({
                 return links;
             },
         });
+        t.field('link', {
+            type: 'Link',
+            args: {
+                id: nonNull(intArg()),
+            },
+            resolve: async (_root, args, ctx) => {
+                return await ctx.prisma.link.findUnique({
+                    where: {
+                        id: args.id,
+                    },
+                });
+            },
+        });
     },
 });
 
