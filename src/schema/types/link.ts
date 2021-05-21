@@ -3,7 +3,17 @@ import { extendType, intArg, nonNull, objectType, stringArg } from 'nexus';
 export const linkType = objectType({
     name: 'Link',
     definition(t) {
-        t.nonNull.int('id'), t.string('description'), t.string('url');
+        t.nonNull.int('id'),
+            t.string('description'),
+            t.string('url'),
+            t.field('postedBy', {
+                type: 'User',
+                resolve: async (root, _args, ctx) => {
+                    return await ctx.prisma.link
+                        .findUnique({ where: { id: root.id } })
+                        .postedBy();
+                },
+            });
     },
 });
 

@@ -56,6 +56,7 @@ export interface NexusGenFieldTypes {
   Link: { // field return type
     description: string | null; // String
     id: number; // Int!
+    postedBy: NexusGenRootTypes['User'] | null; // User
     url: string | null; // String
   }
   Mutation: { // field return type
@@ -78,6 +79,7 @@ export interface NexusGenFieldTypeNames {
   Link: { // field return type name
     description: 'String'
     id: 'Int'
+    postedBy: 'User'
     url: 'String'
   }
   Mutation: { // field return type name
