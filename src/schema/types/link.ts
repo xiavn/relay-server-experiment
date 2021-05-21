@@ -1,4 +1,4 @@
-import { extendType, nonNull, objectType, stringArg } from "nexus";
+import { extendType, intArg, nonNull, objectType, stringArg } from "nexus";
 
 export const linkType = objectType({
     name: "Link",
@@ -40,6 +40,27 @@ export const linkMutation = extendType({
                 });
                 ctx.pubsub.publish("NEW_LINK", newLink);
                 return newLink;
+            },
+        });
+        t.nonNull.field("updateLink", {
+            type: "Link",
+            args: {
+                id: nonNull(intArg()),
+                url: stringArg(),
+                description: stringArg(),
+            },
+            resolve: async (_root, args, ctx) => {
+                const id = args.id;
+                const link = await ctx.prisma.link.update({
+                    where: {
+                        id,
+                    },
+                    data: {
+                        ...args,
+                        id,
+                    },
+                });
+                return link;
             },
         });
     },
