@@ -1,4 +1,9 @@
 import { extendType, intArg, nonNull, objectType } from 'nexus';
+import { NexusGenFieldTypes } from 'src/nexus-typegen';
+
+const subscriptionLabels = {
+    newVote: 'NEW_VOTE',
+};
 
 export const voteType = objectType({
     name: 'Vote',
@@ -54,8 +59,23 @@ export const voteMutation = extendType({
                         link: { connect: { id: args.linkId } },
                     },
                 });
-                ctx.pubsub.publish('NEW_VOTE', newVote);
+                ctx.pubsub.publish(subscriptionLabels.newVote, newVote);
                 return newVote;
+            },
+        });
+    },
+});
+
+export const voteSubscription = extendType({
+    type: 'Subscription',
+    definition(t) {
+        t.field('newVote', {
+            type: 'Vote',
+            subscribe(_root, _args, ctx) {
+                return ctx.pubsub.asyncIterator(subscriptionLabels.newVote);
+            },
+            resolve(eventData: NexusGenFieldTypes['Vote']) {
+                return eventData;
             },
         });
     },

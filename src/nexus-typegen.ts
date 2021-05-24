@@ -86,6 +86,7 @@ export interface NexusGenFieldTypes {
   }
   Subscription: { // field return type
     newLink: NexusGenRootTypes['Link'] | null; // Link
+    newVote: NexusGenRootTypes['Vote'] | null; // Vote
   }
   User: { // field return type
     email: string; // String!
@@ -126,6 +127,7 @@ export interface NexusGenFieldTypeNames {
   }
   Subscription: { // field return type name
     newLink: 'Link'
+    newVote: 'Vote'
   }
   User: { // field return type name
     email: 'String'

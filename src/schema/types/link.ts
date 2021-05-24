@@ -1,4 +1,5 @@
 import { extendType, intArg, nonNull, objectType, stringArg } from 'nexus';
+import { NexusGenFieldTypes } from 'src/nexus-typegen';
 
 const subscriptionLabels = {
     newLink: 'NEW_LINK',
@@ -120,12 +121,10 @@ export const linkSubscription = extendType({
     definition(t) {
         t.field('newLink', {
             type: 'Link',
-            subscribe: async (_root, _args, ctx) => {
-                return await ctx.pubsub.asyncIterator(
-                    subscriptionLabels.newLink,
-                );
+            subscribe: (_root, _args, ctx) => {
+                return ctx.pubsub.asyncIterator(subscriptionLabels.newLink);
             },
-            resolve: (eventData) => eventData,
+            resolve: (eventData: NexusGenFieldTypes['Link']) => eventData,
         });
     },
 });
