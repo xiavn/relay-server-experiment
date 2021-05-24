@@ -29,6 +29,10 @@ type Query {
   link(id: Int!): Link
 }
 
+type Subscription {
+  newLink: Link
+}
+
 type User {
   email: String!
   id: Int!

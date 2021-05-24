@@ -1,5 +1,9 @@
 import { extendType, intArg, nonNull, objectType, stringArg } from 'nexus';
 
+const subscriptionLabels = {
+    newLink: 'NEW_LINK',
+};
+
 export const linkType = objectType({
     name: 'Link',
     definition(t) {
@@ -69,7 +73,7 @@ export const linkMutation = extendType({
                         postedBy: { connect: { id: Number(userId) } },
                     },
                 });
-                ctx.pubsub.publish('NEW_LINK', newLink);
+                ctx.pubsub.publish(subscriptionLabels.newLink, newLink);
                 return newLink;
             },
         });
@@ -107,6 +111,21 @@ export const linkMutation = extendType({
                 });
                 return removed;
             },
+        });
+    },
+});
+
+export const linkSubscription = extendType({
+    type: 'Subscription',
+    definition(t) {
+        t.field('newLink', {
+            type: 'Link',
+            subscribe: async (_root, _args, ctx) => {
+                return await ctx.pubsub.asyncIterator(
+                    subscriptionLabels.newLink,
+                );
+            },
+            resolve: (eventData) => eventData,
         });
     },
 });
