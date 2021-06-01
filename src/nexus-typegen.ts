@@ -4,7 +4,7 @@
  */
 
 
-import { Context } from "./nexus-schema/context"
+import { Context } from "./schema/context"
 
 
 

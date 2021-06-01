@@ -1,5 +1,5 @@
 import { ApolloServer } from 'apollo-server';
-import schema, { contextFunction } from './nexus-schema';
+import schema, { contextFunction } from './schema';
 
 const server = new ApolloServer({
     schema,
