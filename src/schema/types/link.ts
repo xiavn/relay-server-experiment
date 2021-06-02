@@ -14,9 +14,16 @@ export const linkType = objectType({
         t.field('postedBy', {
             type: 'User',
             resolve: async (source, _args, ctx) => {
-                return await ctx.prisma.link
+                const user = await ctx.prisma.link
                     .findUnique({ where: { id: source.id } })
                     .postedBy();
+                if (user !== null) {
+                    return {
+                        ...user,
+                        __typename: 'User',
+                    };
+                }
+                return null;
             },
         });
         t.nonNull.list.nonNull.field('votes', {
