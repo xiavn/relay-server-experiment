@@ -1,3 +1,4 @@
+import { Vote } from '@prisma/client';
 import { extendType, intArg, nonNull, objectType } from 'nexus';
 import { NexusGenFieldTypes } from 'src/nexus-typegen';
 
@@ -74,7 +75,7 @@ export const voteSubscription = extendType({
             subscribe(_root, _args, ctx) {
                 return ctx.pubsub.asyncIterator(subscriptionLabels.newVote);
             },
-            resolve(eventData: NexusGenFieldTypes['Vote']) {
+            resolve(eventData: Vote) {
                 return eventData;
             },
         });

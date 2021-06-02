@@ -1,5 +1,6 @@
 import { fromGlobalId, toGlobalId } from 'graphql-relay';
 import { extendType, idArg, interfaceType, nonNull } from 'nexus';
+import { getUser } from '../model';
 
 export const Node = interfaceType({
     name: 'Node',
@@ -37,6 +38,8 @@ export const nodeQuery = extendType({
                             };
                         }
                         return null;
+                    case 'User':
+                        return await getUser(Number(id), ctx.prisma);
                     default:
                         return null;
                 }

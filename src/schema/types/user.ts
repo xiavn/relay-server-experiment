@@ -1,4 +1,5 @@
 import { objectType } from 'nexus';
+import { getLinksForUser } from '../model';
 
 export const userType = objectType({
     name: 'User',
@@ -9,11 +10,7 @@ export const userType = objectType({
         t.nonNull.list.nonNull.field('links', {
             type: 'Link',
             resolve: async (source, args, ctx) => {
-                return await ctx.prisma.user
-                    .findUnique({
-                        where: { id: source.id },
-                    })
-                    .links();
+                return await getLinksForUser(source.id, ctx.prisma);
             },
         });
     },

@@ -7,8 +7,10 @@ import { getUserId } from 'src/utils';
 const prisma = new PrismaClient();
 const pubsub = new PubSub();
 
+export type Prisma = typeof prisma;
+
 export type Context = {
-    prisma: typeof prisma;
+    prisma: Prisma;
     pubsub: typeof pubsub;
     userId: string | null;
 };
