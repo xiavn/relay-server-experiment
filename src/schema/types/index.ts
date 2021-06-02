@@ -1,3 +1,4 @@
+export * from './node';
 export * from './link';
 export * from './user';
 export * from './authentication';

@@ -3,8 +3,9 @@
  * Do not make changes to this file directly
  */
 
-
+import * as prisma from ".prisma/client"
 import { Context } from "./schema/context"
+import { core } from "nexus"
 
 
 
@@ -32,31 +33,22 @@ export interface NexusGenObjects {
     token?: string | null; // String
     user?: NexusGenRootTypes['User'] | null; // User
   }
-  Link: { // root type
-    description?: string | null; // String
-    id: number; // Int!
-    url?: string | null; // String
-  }
+  Link: prisma.Link;
   Mutation: {};
   Query: {};
   Subscription: {};
-  User: { // root type
-    email: string; // String!
-    id: number; // Int!
-    name: string; // String!
-  }
-  Vote: { // root type
-    id: number; // Int!
-  }
+  User: prisma.User;
+  Vote: prisma.Vote;
 }
 
 export interface NexusGenInterfaces {
+  Node: core.Discriminate<'Link', 'required'> | core.Discriminate<'User', 'required'>;
 }
 
 export interface NexusGenUnions {
 }
 
-export type NexusGenRootTypes = NexusGenObjects
+export type NexusGenRootTypes = NexusGenInterfaces & NexusGenObjects
 
 export type NexusGenAllTypes = NexusGenRootTypes & NexusGenScalars
 
@@ -67,7 +59,7 @@ export interface NexusGenFieldTypes {
   }
   Link: { // field return type
     description: string | null; // String
-    id: number; // Int!
+    id: string; // ID!
     postedBy: NexusGenRootTypes['User'] | null; // User
     url: string | null; // String
     votes: NexusGenRootTypes['Vote'][]; // [Vote!]!
@@ -90,7 +82,7 @@ export interface NexusGenFieldTypes {
   }
   User: { // field return type
     email: string; // String!
-    id: number; // Int!
+    id: string; // ID!
     links: NexusGenRootTypes['Link'][]; // [Link!]!
     name: string; // String!
   }
@@ -98,6 +90,9 @@ export interface NexusGenFieldTypes {
     id: number; // Int!
     link: NexusGenRootTypes['Link'] | null; // Link
     user: NexusGenRootTypes['User'] | null; // User
+  }
+  Node: { // field return type
+    id: string; // ID!
   }
 }
 
@@ -108,7 +103,7 @@ export interface NexusGenFieldTypeNames {
   }
   Link: { // field return type name
     description: 'String'
-    id: 'Int'
+    id: 'ID'
     postedBy: 'User'
     url: 'String'
     votes: 'Vote'
@@ -131,7 +126,7 @@ export interface NexusGenFieldTypeNames {
   }
   User: { // field return type name
     email: 'String'
-    id: 'Int'
+    id: 'ID'
     links: 'Link'
     name: 'String'
   }
@@ -139,6 +134,9 @@ export interface NexusGenFieldTypeNames {
     id: 'Int'
     link: 'Link'
     user: 'User'
+  }
+  Node: { // field return type name
+    id: 'ID'
   }
 }
 
@@ -177,9 +175,12 @@ export interface NexusGenArgTypes {
 }
 
 export interface NexusGenAbstractTypeMembers {
+  Node: "Link" | "User"
 }
 
 export interface NexusGenTypeInterfaces {
+  Link: "Node"
+  User: "Node"
 }
 
 export type NexusGenObjectNames = keyof NexusGenObjects;
@@ -188,7 +189,7 @@ export type NexusGenInputNames = never;
 
 export type NexusGenEnumNames = never;
 
-export type NexusGenInterfaceNames = never;
+export type NexusGenInterfaceNames = keyof NexusGenInterfaces;
 
 export type NexusGenScalarNames = keyof NexusGenScalars;
 
@@ -200,9 +201,9 @@ export type NexusGenAbstractsUsingStrategyResolveType = never;
 
 export type NexusGenFeaturesConfig = {
   abstractTypeStrategies: {
+    __typename: true
     isTypeOf: false
-    resolveType: true
-    __typename: false
+    resolveType: false
   }
 }
 

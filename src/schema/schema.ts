@@ -26,6 +26,19 @@ const schema = makeSchema({
         module: join(__dirname, './context.ts'),
         export: 'Context',
     },
+    sourceTypes: {
+        modules: [
+            {
+                module: '.prisma/client',
+                alias: 'prisma',
+            },
+        ],
+    },
+    features: {
+        abstractTypeStrategies: {
+            __typename: true,
+        },
+    },
 });
 
 export default schema;

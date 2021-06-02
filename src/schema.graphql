@@ -7,9 +7,9 @@ type AuthPayload {
   user: User
 }
 
-type Link {
+type Link implements Node {
   description: String
-  id: Int!
+  id: ID!
   postedBy: User
   url: String
   votes: [Vote!]!
@@ -24,6 +24,10 @@ type Mutation {
   updateLink(description: String, id: Int!, url: String): Link!
 }
 
+interface Node {
+  id: ID!
+}
+
 type Query {
   feed: [Link]!
   link(id: Int!): Link
@@ -34,9 +38,9 @@ type Subscription {
   newVote: Vote
 }
 
-type User {
+type User implements Node {
   email: String!
-  id: Int!
+  id: ID!
   links: [Link!]!
   name: String!
 }

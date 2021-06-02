@@ -1,5 +1,5 @@
+import { Link } from '@prisma/client';
 import { extendType, intArg, nonNull, objectType, stringArg } from 'nexus';
-import { NexusGenFieldTypes } from 'src/nexus-typegen';
 
 const subscriptionLabels = {
     newLink: 'NEW_LINK',
@@ -8,17 +8,17 @@ const subscriptionLabels = {
 export const linkType = objectType({
     name: 'Link',
     definition(t) {
-        t.nonNull.int('id'),
-            t.string('description'),
-            t.string('url'),
-            t.field('postedBy', {
-                type: 'User',
-                resolve: async (root, _args, ctx) => {
-                    return await ctx.prisma.link
-                        .findUnique({ where: { id: root.id } })
-                        .postedBy();
-                },
-            });
+        t.implements('Node');
+        t.string('description');
+        t.string('url');
+        t.field('postedBy', {
+            type: 'User',
+            resolve: async (source, _args, ctx) => {
+                return await ctx.prisma.link
+                    .findUnique({ where: { id: source.id } })
+                    .postedBy();
+            },
+        });
         t.nonNull.list.nonNull.field('votes', {
             type: 'Vote',
             resolve: async (root, _args, ctx) => {
@@ -37,7 +37,7 @@ export const linkQuery = extendType({
             type: 'Link',
             resolve: async (_root, _args, ctx) => {
                 const links = await ctx.prisma.link.findMany();
-                return links;
+                return links.map((link) => ({ ...link, __typename: 'Link' }));
             },
         });
         t.field('link', {
@@ -46,11 +46,18 @@ export const linkQuery = extendType({
                 id: nonNull(intArg()),
             },
             resolve: async (_root, args, ctx) => {
-                return await ctx.prisma.link.findUnique({
+                const link = await ctx.prisma.link.findUnique({
                     where: {
                         id: args.id,
                     },
                 });
+                if (link !== null) {
+                    return {
+                        ...link,
+                        __typename: 'Link',
+                    };
+                }
+                return null;
             },
         });
     },
@@ -124,7 +131,9 @@ export const linkSubscription = extendType({
             subscribe: (_root, _args, ctx) => {
                 return ctx.pubsub.asyncIterator(subscriptionLabels.newLink);
             },
-            resolve: (eventData: NexusGenFieldTypes['Link']) => eventData,
+            resolve: (eventData: Link) => {
+                return eventData;
+            },
         });
     },
 });
