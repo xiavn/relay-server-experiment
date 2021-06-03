@@ -2,6 +2,7 @@ import { fromGlobalId, toGlobalId } from 'graphql-relay';
 import { extendType, idArg, interfaceType, nonNull } from 'nexus';
 import { NexusGenAbstractTypeMembers } from 'src/nexus-typegen';
 import { getUser, getLink } from '../model';
+import { getVote } from '../model/vote';
 
 export const Node = interfaceType({
     name: 'Node',
@@ -30,6 +31,8 @@ export const nodeQuery = extendType({
                         return await getLink(Number(id), ctx.prisma);
                     case 'User':
                         return await getUser(Number(id), ctx.prisma);
+                    case 'Vote':
+                        return await getVote(Number(id), ctx.prisma);
                     default:
                         return null;
                 }
