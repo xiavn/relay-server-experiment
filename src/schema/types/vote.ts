@@ -1,6 +1,6 @@
-import { Vote } from '@prisma/client';
 import { extendType, intArg, nonNull, objectType } from 'nexus';
-import { NexusGenFieldTypes } from 'src/nexus-typegen';
+import { getLinkForVote, getUserForVote } from '../model/vote';
+import { Vote } from '../source-types';
 
 const subscriptionLabels = {
     newVote: 'NEW_VOTE',
@@ -9,25 +9,17 @@ const subscriptionLabels = {
 export const voteType = objectType({
     name: 'Vote',
     definition(t) {
-        t.nonNull.int('id'),
-            t.field('link', {
-                type: 'Link',
-                resolve: async (root, _args, ctx) => {
-                    return await ctx.prisma.vote
-                        .findUnique({
-                            where: { id: root.id },
-                        })
-                        .link();
-                },
-            });
+        t.implements('Node');
+        t.field('link', {
+            type: 'Link',
+            resolve: async (source, _args, ctx) => {
+                return await getLinkForVote(source.id, ctx.prisma);
+            },
+        });
         t.field('user', {
             type: 'User',
             resolve: async (root, _args, ctx) => {
-                return await ctx.prisma.vote
-                    .findUnique({
-                        where: { id: root.id },
-                    })
-                    .user();
+                return await getUserForVote(root.id, ctx.prisma);
             },
         });
     },
