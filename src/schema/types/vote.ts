@@ -44,16 +44,6 @@ export const voteMutation = extendType({
                 if (userId === null) {
                     throw new Error(`User needs to be signed in to vote`);
                 }
-                const vote = await getVoteByUserAndLink(
-                    {
-                        userId,
-                        linkId,
-                    },
-                    ctx.prisma,
-                );
-                if (Boolean(vote)) {
-                    throw new Error(`Already voted for link: ${args.linkId}`);
-                }
                 const newVote = await createNewVote(
                     { userId, linkId },
                     ctx.prisma,

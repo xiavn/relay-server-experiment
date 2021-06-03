@@ -54,6 +54,16 @@ export const createNewVote = async (
     { userId, linkId }: NewVoteArguments,
     prisma: Prisma,
 ) => {
+    const vote = await getVoteByUserAndLink(
+        {
+            userId,
+            linkId,
+        },
+        prisma,
+    );
+    if (Boolean(vote)) {
+        throw new Error(`Already voted for link: ${linkId}`);
+    }
     const newVote = await prisma.vote.create({
         data: {
             user: { connect: { id: userId } },
