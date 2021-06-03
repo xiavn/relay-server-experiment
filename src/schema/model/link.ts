@@ -1,5 +1,5 @@
 import { Prisma } from '../context';
-import { Link } from '../source-types';
+import { Link, User } from '../source-types';
 import { itemOrNull } from './utils';
 
 export const getLink = async (id: number, prisma: Prisma) => {
@@ -9,4 +9,9 @@ export const getLink = async (id: number, prisma: Prisma) => {
         },
     });
     return itemOrNull<Link>(link, 'Link');
+};
+
+export const getUserForLink = async (id: number, prisma: Prisma) => {
+    const user = await prisma.link.findUnique({ where: { id } }).postedBy();
+    return itemOrNull<User>(user, 'User');
 };

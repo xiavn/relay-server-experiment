@@ -15,7 +15,7 @@ export const linkType = objectType({
         t.field('postedBy', {
             type: 'User',
             resolve: async (source, _args, ctx) => {
-                return getUserForLink(source.id, ctx.prisma);
+                return await getUserForLink(source.id, ctx.prisma);
             },
         });
         t.nonNull.list.nonNull.field('votes', {
@@ -45,7 +45,7 @@ export const linkQuery = extendType({
                 id: nonNull(intArg()),
             },
             resolve: async (_root, args, ctx) => {
-                return getLink(args.id, ctx.prisma);
+                return await getLink(args.id, ctx.prisma);
             },
         });
     },
