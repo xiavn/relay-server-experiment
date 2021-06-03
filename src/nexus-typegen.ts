@@ -3,7 +3,7 @@
  * Do not make changes to this file directly
  */
 
-import * as prisma from ".prisma/client"
+import * as prisma from "./schema/source-types"
 import { Context } from "./schema/context"
 import { core } from "nexus"
 
@@ -42,7 +42,7 @@ export interface NexusGenObjects {
 }
 
 export interface NexusGenInterfaces {
-  Node: core.Discriminate<'Link', 'required'> | core.Discriminate<'User', 'required'>;
+  Node: core.Discriminate<'Link', 'required'> | core.Discriminate<'User', 'required'> | core.Discriminate<'Vote', 'required'>;
 }
 
 export interface NexusGenUnions {
@@ -88,7 +88,7 @@ export interface NexusGenFieldTypes {
     name: string; // String!
   }
   Vote: { // field return type
-    id: number; // Int!
+    id: string; // ID!
     link: NexusGenRootTypes['Link'] | null; // Link
     user: NexusGenRootTypes['User'] | null; // User
   }
@@ -133,7 +133,7 @@ export interface NexusGenFieldTypeNames {
     name: 'String'
   }
   Vote: { // field return type name
-    id: 'Int'
+    id: 'ID'
     link: 'Link'
     user: 'User'
   }
@@ -180,12 +180,13 @@ export interface NexusGenArgTypes {
 }
 
 export interface NexusGenAbstractTypeMembers {
-  Node: "Link" | "User"
+  Node: "Link" | "User" | "Vote"
 }
 
 export interface NexusGenTypeInterfaces {
   Link: "Node"
   User: "Node"
+  Vote: "Node"
 }
 
 export type NexusGenObjectNames = keyof NexusGenObjects;

@@ -46,8 +46,8 @@ type User implements Node {
   name: String!
 }
 
-type Vote {
-  id: Int!
+type Vote implements Node {
+  id: ID!
   link: Link
   user: User
 }
