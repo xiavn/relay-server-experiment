@@ -1,5 +1,6 @@
-import { Link } from '@prisma/client';
 import { extendType, intArg, nonNull, objectType, stringArg } from 'nexus';
+import { getLink, getUserForLink } from '../model';
+import { Link } from '../source-types';
 
 const subscriptionLabels = {
     newLink: 'NEW_LINK',
@@ -14,16 +15,7 @@ export const linkType = objectType({
         t.field('postedBy', {
             type: 'User',
             resolve: async (source, _args, ctx) => {
-                const user = await ctx.prisma.link
-                    .findUnique({ where: { id: source.id } })
-                    .postedBy();
-                if (user !== null) {
-                    return {
-                        ...user,
-                        __typename: 'User',
-                    };
-                }
-                return null;
+                return getUserForLink(source.id, ctx.prisma);
             },
         });
         t.nonNull.list.nonNull.field('votes', {
@@ -53,18 +45,7 @@ export const linkQuery = extendType({
                 id: nonNull(intArg()),
             },
             resolve: async (_root, args, ctx) => {
-                const link = await ctx.prisma.link.findUnique({
-                    where: {
-                        id: args.id,
-                    },
-                });
-                if (link !== null) {
-                    return {
-                        ...link,
-                        __typename: 'Link',
-                    };
-                }
-                return null;
+                return getLink(args.id, ctx.prisma);
             },
         });
     },
