@@ -152,7 +152,7 @@ export interface NexusGenArgTypes {
       url: string; // String!
     }
     deleteLink: { // args
-      id: number; // Int!
+      id: string; // ID!
     }
     login: { // args
       email: string; // String!

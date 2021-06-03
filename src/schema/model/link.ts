@@ -59,3 +59,17 @@ export const updateLink = async (
     });
     return item<Link>(link, 'Link');
 };
+
+type DeleteLinkArguments = { id: number };
+
+export const deleteLink = async (
+    { id }: DeleteLinkArguments,
+    prisma: Prisma,
+) => {
+    const link = await prisma.link.delete({
+        where: {
+            id,
+        },
+    });
+    return item<Link>(link, 'Link');
+};

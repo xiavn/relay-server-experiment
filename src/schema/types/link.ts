@@ -7,7 +7,13 @@ import {
     objectType,
     stringArg,
 } from 'nexus';
-import { createNewLink, getLink, getUserForLink, updateLink } from '../model';
+import {
+    createNewLink,
+    deleteLink,
+    getLink,
+    getUserForLink,
+    updateLink,
+} from '../model';
 import { Link } from '../source-types';
 
 const subscriptionLabels = {
@@ -108,14 +114,17 @@ export const linkMutation = extendType({
         t.nonNull.field('deleteLink', {
             type: 'Link',
             args: {
-                id: nonNull(intArg()),
+                id: nonNull(idArg()),
             },
             resolve: async (_root, args, ctx) => {
-                const removed = await ctx.prisma.link.delete({
-                    where: {
-                        id: args.id,
-                    },
-                });
+                const { id, type } = fromGlobalId(args.id);
+                if (type !== 'Link') {
+                    throw new Error(`ID needs to be a Link`);
+                }
+                const removed = await deleteLink(
+                    { id: Number(id) },
+                    ctx.prisma,
+                );
                 return removed;
             },
         });
