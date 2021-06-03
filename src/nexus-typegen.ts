@@ -165,7 +165,7 @@ export interface NexusGenArgTypes {
     }
     updateLink: { // args
       description?: string | null; // String
-      id: number; // Int!
+      id: string; // ID!
       url?: string | null; // String
     }
   }

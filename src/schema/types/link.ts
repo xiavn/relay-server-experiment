@@ -1,5 +1,13 @@
-import { extendType, intArg, nonNull, objectType, stringArg } from 'nexus';
-import { getLink, getUserForLink } from '../model';
+import { fromGlobalId } from 'graphql-relay';
+import {
+    extendType,
+    idArg,
+    intArg,
+    nonNull,
+    objectType,
+    stringArg,
+} from 'nexus';
+import { createNewLink, getLink, getUserForLink, updateLink } from '../model';
 import { Link } from '../source-types';
 
 const subscriptionLabels = {
@@ -62,13 +70,15 @@ export const linkMutation = extendType({
             },
             resolve: async (_root, args, ctx) => {
                 const { userId } = ctx;
-                const newLink = await ctx.prisma.link.create({
-                    data: {
-                        description: args.description,
-                        url: args.url,
-                        postedBy: { connect: { id: Number(userId) } },
-                    },
-                });
+                if (userId === null) {
+                    throw new Error(
+                        `User needs to be signed in to create new link`,
+                    );
+                }
+                const newLink = await createNewLink(
+                    { userId, ...args },
+                    ctx.prisma,
+                );
                 ctx.pubsub.publish(subscriptionLabels.newLink, newLink);
                 return newLink;
             },
@@ -76,22 +86,23 @@ export const linkMutation = extendType({
         t.nonNull.field('updateLink', {
             type: 'Link',
             args: {
-                id: nonNull(intArg()),
+                id: nonNull(idArg()),
                 url: stringArg(),
                 description: stringArg(),
             },
             resolve: async (_root, args, ctx) => {
-                const id = args.id;
-                const link = await ctx.prisma.link.update({
-                    where: {
-                        id,
-                    },
-                    data: {
-                        ...args,
-                        id,
-                    },
-                });
-                return link;
+                const userId = ctx.userId;
+                if (userId === null) {
+                    throw new Error(`User needs to be signed in to edit link`);
+                }
+                const { id, type } = fromGlobalId(args.id);
+                if (type !== 'Link') {
+                    throw new Error(`ID needs to be a Link`);
+                }
+                return await updateLink(
+                    { ...args, id: Number(id), userId },
+                    ctx.prisma,
+                );
             },
         });
         t.nonNull.field('deleteLink', {

@@ -9,13 +9,13 @@ const getTokenPayload = (token: string) => {
 export const getUserId = (authHeader?: string, authToken?: string) => {
     if (authHeader) {
         const token = authHeader.replace('Bearer ', '');
-        if (!token) {
+        if (!token || token === 'Bearer') {
             throw new Error('No token found');
         }
         const payload = getTokenPayload(token) as { userId: string };
         if (typeof payload === 'object') {
             if (typeof payload.userId !== 'undefined') {
-                return payload.userId;
+                return Number(payload.userId);
             }
         }
     }

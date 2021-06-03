@@ -12,7 +12,7 @@ export type Prisma = typeof prisma;
 export type Context = {
     prisma: Prisma;
     pubsub: typeof pubsub;
-    userId: string | null;
+    userId: number | null;
 };
 
 export const contextFunction: ContextFunction<ExpressContext, Context> = ({

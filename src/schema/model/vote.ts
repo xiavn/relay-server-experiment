@@ -1,3 +1,4 @@
+import { NexusGenArgTypes } from 'src/nexus-typegen';
 import { Prisma } from '../context';
 import { Link, User, Vote } from '../source-types';
 import { item, itemOrNull } from './utils';
@@ -33,7 +34,9 @@ export const getUserForVote = async (id: number, prisma: Prisma) => {
     return itemOrNull<User>(user, 'User');
 };
 
-type NewVoteArguments = { userId: number; linkId: number };
+type NewVoteArguments = NexusGenArgTypes['Mutation']['addVote'] & {
+    userId: number;
+};
 
 export const getVoteByUserAndLink = async (
     { userId, linkId }: NewVoteArguments,

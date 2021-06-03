@@ -34,7 +34,7 @@ export const voteMutation = extendType({
                 linkId: nonNull(intArg()),
             },
             resolve: async (_root, args, ctx) => {
-                const userId = Number(ctx.userId);
+                const userId = ctx.userId;
                 const linkId = Number(args.linkId);
                 if (userId === null) {
                     throw new Error(`User needs to be signed in to vote`);

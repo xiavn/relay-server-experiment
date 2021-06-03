@@ -21,7 +21,7 @@ type Mutation {
   deleteLink(id: Int!): Link!
   login(email: String!, password: String!): AuthPayload
   signup(email: String!, name: String!, password: String!): AuthPayload
-  updateLink(description: String, id: Int!, url: String): Link!
+  updateLink(description: String, id: ID!, url: String): Link!
 }
 
 interface Node {
