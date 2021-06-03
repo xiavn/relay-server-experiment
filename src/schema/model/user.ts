@@ -1,5 +1,6 @@
-import { User } from '../source-types';
+import { User, Link } from '../source-types';
 import { Prisma } from '../context';
+import { itemOrNull, itemList } from './utils';
 
 export const getUser = async (
     id: number,
@@ -10,13 +11,7 @@ export const getUser = async (
             id,
         },
     });
-    if (user !== null) {
-        return {
-            ...user,
-            __typename: 'User',
-        };
-    }
-    return null;
+    return itemOrNull<User>(user, 'User');
 };
 
 export const getLinksForUser = async (
@@ -28,8 +23,5 @@ export const getLinksForUser = async (
             where: { id },
         })
         .links();
-    return links.map((link) => ({
-        ...link,
-        __typename: 'Link',
-    }));
+    return itemList<Link>(links, 'Link');
 };
