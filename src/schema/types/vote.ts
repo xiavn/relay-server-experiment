@@ -1,10 +1,5 @@
 import { extendType, intArg, nonNull, objectType } from 'nexus';
-import {
-    createNewVote,
-    getLinkForVote,
-    getUserForVote,
-    getVoteByUserAndLink,
-} from '../model/vote';
+import { createNewVote, getLinkForVote, getUserForVote } from '../model/vote';
 import { Vote } from '../source-types';
 
 const subscriptionLabels = {
