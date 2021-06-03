@@ -1,5 +1,6 @@
 import { fromGlobalId, toGlobalId } from 'graphql-relay';
 import { extendType, idArg, interfaceType, nonNull } from 'nexus';
+import { NexusGenAbstractTypeMembers } from 'src/nexus-typegen';
 import { getUser, getLink } from '../model';
 
 export const Node = interfaceType({
@@ -24,7 +25,7 @@ export const nodeQuery = extendType({
             },
             resolve: async (_, args, ctx) => {
                 const { type, id } = fromGlobalId(args.id);
-                switch (type) {
+                switch (type as NexusGenAbstractTypeMembers['Node']) {
                     case 'Link':
                         return await getLink(Number(id), ctx.prisma);
                     case 'User':
