@@ -1,5 +1,10 @@
 import { extendType, intArg, nonNull, objectType } from 'nexus';
-import { getLinkForVote, getUserForVote } from '../model/vote';
+import {
+    createNewVote,
+    getLinkForVote,
+    getUserForVote,
+    getVoteByUserAndLink,
+} from '../model/vote';
 import { Vote } from '../source-types';
 
 const subscriptionLabels = {
@@ -34,24 +39,25 @@ export const voteMutation = extendType({
                 linkId: nonNull(intArg()),
             },
             resolve: async (_root, args, ctx) => {
-                const { userId } = ctx;
-                const vote = await ctx.prisma.vote.findUnique({
-                    where: {
-                        linkId_userId: {
-                            linkId: args.linkId,
-                            userId: Number(userId),
-                        },
+                const userId = Number(ctx.userId);
+                const linkId = Number(args.linkId);
+                if (userId === null) {
+                    throw new Error(`User needs to be signed in to vote`);
+                }
+                const vote = await getVoteByUserAndLink(
+                    {
+                        userId,
+                        linkId,
                     },
-                });
+                    ctx.prisma,
+                );
                 if (Boolean(vote)) {
                     throw new Error(`Already voted for link: ${args.linkId}`);
                 }
-                const newVote = ctx.prisma.vote.create({
-                    data: {
-                        user: { connect: { id: Number(userId) } },
-                        link: { connect: { id: args.linkId } },
-                    },
-                });
+                const newVote = await createNewVote(
+                    { userId, linkId },
+                    ctx.prisma,
+                );
                 ctx.pubsub.publish(subscriptionLabels.newVote, newVote);
                 return newVote;
             },

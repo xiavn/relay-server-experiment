@@ -11,6 +11,16 @@ export const itemOrNull = <I extends { __typename: string }>(
     return null;
 };
 
+export const item = <I extends { __typename: string }>(
+    item: Omit<I, '__typename'>,
+    typename: I['__typename'],
+) => {
+    return {
+        ...item,
+        __typename: typename,
+    };
+};
+
 export const itemList = <I extends { __typename: string }>(
     items: Omit<I, '__typename'>[],
     typename: I['__typename'],
