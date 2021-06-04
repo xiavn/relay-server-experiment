@@ -1,20 +1,6 @@
-import { buildSchema, GraphQLObjectType, GraphQLSchema } from 'graphql';
-import { makeSchema } from 'nexus';
+import { connectionPlugin, makeSchema } from 'nexus';
 import { join } from 'path';
-import { nodeField } from './node';
 import * as types from './types';
-
-// const query = new GraphQLObjectType({
-//     name: "Query",
-//     fields: () => ({
-//         link:
-//         node: nodeField,
-//     }),
-// });
-
-// const schema = new GraphQLSchema({
-//     query,
-// });
 
 const schema = makeSchema({
     types,
@@ -39,6 +25,7 @@ const schema = makeSchema({
             __typename: true,
         },
     },
+    plugins: [connectionPlugin()],
 });
 
 export default schema;
