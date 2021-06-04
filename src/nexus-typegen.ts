@@ -68,13 +68,13 @@ export interface NexusGenFieldTypes {
     addVote: NexusGenRootTypes['Vote'] | null; // Vote
     createLink: NexusGenRootTypes['Link']; // Link!
     deleteLink: NexusGenRootTypes['Link']; // Link!
-    login: NexusGenRootTypes['AuthPayload'] | null; // AuthPayload
     signup: NexusGenRootTypes['AuthPayload'] | null; // AuthPayload
     updateLink: NexusGenRootTypes['Link']; // Link!
   }
   Query: { // field return type
     feed: Array<NexusGenRootTypes['Link'] | null>; // [Link]!
     link: NexusGenRootTypes['Link'] | null; // Link
+    login: NexusGenRootTypes['AuthPayload'] | null; // AuthPayload
     node: NexusGenRootTypes['Node'] | null; // Node
   }
   Subscription: { // field return type
@@ -113,13 +113,13 @@ export interface NexusGenFieldTypeNames {
     addVote: 'Vote'
     createLink: 'Link'
     deleteLink: 'Link'
-    login: 'AuthPayload'
     signup: 'AuthPayload'
     updateLink: 'Link'
   }
   Query: { // field return type name
     feed: 'Link'
     link: 'Link'
+    login: 'AuthPayload'
     node: 'Node'
   }
   Subscription: { // field return type name
@@ -154,10 +154,6 @@ export interface NexusGenArgTypes {
     deleteLink: { // args
       id: string; // ID!
     }
-    login: { // args
-      email: string; // String!
-      password: string; // String!
-    }
     signup: { // args
       email: string; // String!
       name: string; // String!
@@ -172,6 +168,10 @@ export interface NexusGenArgTypes {
   Query: {
     link: { // args
       id: number; // Int!
+    }
+    login: { // args
+      email: string; // String!
+      password: string; // String!
     }
     node: { // args
       id: string; // ID!

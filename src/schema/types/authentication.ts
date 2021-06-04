@@ -1,7 +1,7 @@
-import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { extendType, nonNull, objectType, stringArg } from 'nexus';
 import { APP_SECRET } from 'src/utils';
+import { createUser, loginUser } from '../model';
 
 export const authPayloadType = objectType({
     name: 'AuthPayload',
@@ -24,17 +24,17 @@ export const authMutation = extendType({
                 name: nonNull(stringArg()),
             },
             resolve: async (_root, args, ctx) => {
-                const password = await bcrypt.hash(args.password, 10);
-                const user = await ctx.prisma.user.create({
-                    data: {
-                        ...args,
-                        password,
-                    },
-                });
+                const user = await createUser(args, ctx.prisma);
                 const token = jwt.sign({ userId: user.id }, APP_SECRET);
                 return { token, user };
             },
         });
+    },
+});
+
+export const authQuery = extendType({
+    type: 'Query',
+    definition(t) {
         t.field('login', {
             type: 'AuthPayload',
             args: {
@@ -42,21 +42,7 @@ export const authMutation = extendType({
                 password: nonNull(stringArg()),
             },
             resolve: async (_root, args, ctx) => {
-                const user = await ctx.prisma.user.findUnique({
-                    where: { email: args.email },
-                });
-                if (!user) {
-                    throw new Error('No user found');
-                }
-
-                const valid = await bcrypt.compare(
-                    args.password,
-                    user.password,
-                );
-                if (!valid) {
-                    throw new Error('Invalid password');
-                }
-
+                const user = await loginUser(args, ctx.prisma);
                 const token = jwt.sign({ userId: user.id }, APP_SECRET);
                 return {
                     token,
