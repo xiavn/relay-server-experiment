@@ -35,9 +35,10 @@ export const linkType = objectType({
         t.nonNull.list.nonNull.field('votes', {
             type: 'Vote',
             resolve: async (root, _args, ctx) => {
-                return await ctx.prisma.link
+                const votes = await ctx.prisma.link
                     .findUnique({ where: { id: root.id } })
                     .votes();
+                return votes.map((vote) => ({ ...vote, __typename: 'Vote' }));
             },
         });
     },
