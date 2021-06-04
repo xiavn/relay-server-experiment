@@ -1,8 +1,8 @@
 import { link } from 'fs';
 import { NexusGenArgTypes } from 'src/nexus-typegen';
 import { Prisma } from '../context';
-import { Link, User } from '../source-types';
-import { item, itemOrNull } from './utils';
+import { Link, User, Vote } from '../source-types';
+import { item, itemList, itemOrNull } from './utils';
 
 export const getLink = async (id: number, prisma: Prisma) => {
     const link = await prisma.link.findUnique({
@@ -72,4 +72,9 @@ export const deleteLink = async (
         },
     });
     return item<Link>(link, 'Link');
+};
+
+export const getVotesForLink = async (id: number, prisma: Prisma) => {
+    const votes = await prisma.link.findUnique({ where: { id } }).votes();
+    return itemList<Vote>(votes, 'Vote');
 };

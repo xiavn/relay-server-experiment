@@ -12,6 +12,7 @@ import {
     deleteLink,
     getLink,
     getUserForLink,
+    getVotesForLink,
     updateLink,
 } from '../model';
 import { Link } from '../source-types';
@@ -32,13 +33,11 @@ export const linkType = objectType({
                 return await getUserForLink(source.id, ctx.prisma);
             },
         });
-        t.nonNull.list.nonNull.field('votes', {
+        t.connectionField('votes', {
             type: 'Vote',
-            resolve: async (root, _args, ctx) => {
-                const votes = await ctx.prisma.link
-                    .findUnique({ where: { id: root.id } })
-                    .votes();
-                return votes.map((vote) => ({ ...vote, __typename: 'Vote' }));
+            resolve: async (root, args, ctx) => {
+                const votes = await getVotesForLink(root.id, ctx.prisma);
+                return votes;
             },
         });
     },

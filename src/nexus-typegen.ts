@@ -47,10 +47,35 @@ export interface NexusGenObjects {
   }
   Link: prisma.Link;
   Mutation: {};
+  PageCursor: { // root type
+    cursor: string; // String!
+    isCurrent: boolean; // Boolean!
+    page: number; // Int!
+  }
+  PageCursors: { // root type
+    around: NexusGenRootTypes['PageCursor'][]; // [PageCursor!]!
+    first?: NexusGenRootTypes['PageCursor'] | null; // PageCursor
+    last?: NexusGenRootTypes['PageCursor'] | null; // PageCursor
+    previous?: NexusGenRootTypes['PageCursor'] | null; // PageCursor
+  }
+  PageInfo: { // root type
+    endCursor?: string | null; // String
+    hasNextPage: boolean; // Boolean!
+    hasPreviousPage: boolean; // Boolean!
+    startCursor?: string | null; // String
+  }
   Query: {};
   Subscription: {};
   User: prisma.User;
   Vote: prisma.Vote;
+  VoteConnection: { // root type
+    edges?: Array<NexusGenRootTypes['VoteEdge'] | null> | null; // [VoteEdge]
+    pageInfo: NexusGenRootTypes['PageInfo']; // PageInfo!
+  }
+  VoteEdge: { // root type
+    cursor: string; // String!
+    node?: NexusGenRootTypes['Vote'] | null; // Vote
+  }
 }
 
 export interface NexusGenInterfaces {
@@ -74,7 +99,7 @@ export interface NexusGenFieldTypes {
     id: string; // ID!
     postedBy: NexusGenRootTypes['User'] | null; // User
     url: string | null; // String
-    votes: NexusGenRootTypes['Vote'][]; // [Vote!]!
+    votes: NexusGenRootTypes['VoteConnection'] | null; // VoteConnection
   }
   Mutation: { // field return type
     addVote: NexusGenRootTypes['Vote'] | null; // Vote
@@ -82,6 +107,23 @@ export interface NexusGenFieldTypes {
     deleteLink: NexusGenRootTypes['Link']; // Link!
     signup: NexusGenRootTypes['AuthPayload'] | null; // AuthPayload
     updateLink: NexusGenRootTypes['Link']; // Link!
+  }
+  PageCursor: { // field return type
+    cursor: string; // String!
+    isCurrent: boolean; // Boolean!
+    page: number; // Int!
+  }
+  PageCursors: { // field return type
+    around: NexusGenRootTypes['PageCursor'][]; // [PageCursor!]!
+    first: NexusGenRootTypes['PageCursor'] | null; // PageCursor
+    last: NexusGenRootTypes['PageCursor'] | null; // PageCursor
+    previous: NexusGenRootTypes['PageCursor'] | null; // PageCursor
+  }
+  PageInfo: { // field return type
+    endCursor: string | null; // String
+    hasNextPage: boolean; // Boolean!
+    hasPreviousPage: boolean; // Boolean!
+    startCursor: string | null; // String
   }
   Query: { // field return type
     feed: Array<NexusGenRootTypes['Link'] | null>; // [Link]!
@@ -104,6 +146,14 @@ export interface NexusGenFieldTypes {
     link: NexusGenRootTypes['Link'] | null; // Link
     user: NexusGenRootTypes['User'] | null; // User
   }
+  VoteConnection: { // field return type
+    edges: Array<NexusGenRootTypes['VoteEdge'] | null> | null; // [VoteEdge]
+    pageInfo: NexusGenRootTypes['PageInfo']; // PageInfo!
+  }
+  VoteEdge: { // field return type
+    cursor: string; // String!
+    node: NexusGenRootTypes['Vote'] | null; // Vote
+  }
   Node: { // field return type
     id: string; // ID!
   }
@@ -119,7 +169,7 @@ export interface NexusGenFieldTypeNames {
     id: 'ID'
     postedBy: 'User'
     url: 'String'
-    votes: 'Vote'
+    votes: 'VoteConnection'
   }
   Mutation: { // field return type name
     addVote: 'Vote'
@@ -127,6 +177,23 @@ export interface NexusGenFieldTypeNames {
     deleteLink: 'Link'
     signup: 'AuthPayload'
     updateLink: 'Link'
+  }
+  PageCursor: { // field return type name
+    cursor: 'String'
+    isCurrent: 'Boolean'
+    page: 'Int'
+  }
+  PageCursors: { // field return type name
+    around: 'PageCursor'
+    first: 'PageCursor'
+    last: 'PageCursor'
+    previous: 'PageCursor'
+  }
+  PageInfo: { // field return type name
+    endCursor: 'String'
+    hasNextPage: 'Boolean'
+    hasPreviousPage: 'Boolean'
+    startCursor: 'String'
   }
   Query: { // field return type name
     feed: 'Link'
@@ -149,12 +216,28 @@ export interface NexusGenFieldTypeNames {
     link: 'Link'
     user: 'User'
   }
+  VoteConnection: { // field return type name
+    edges: 'VoteEdge'
+    pageInfo: 'PageInfo'
+  }
+  VoteEdge: { // field return type name
+    cursor: 'String'
+    node: 'Vote'
+  }
   Node: { // field return type name
     id: 'ID'
   }
 }
 
 export interface NexusGenArgTypes {
+  Link: {
+    votes: { // args
+      after?: string | null; // String
+      before?: string | null; // String
+      first?: number | null; // Int
+      last?: number | null; // Int
+    }
+  }
   Mutation: {
     addVote: { // args
       linkId: number; // Int!
