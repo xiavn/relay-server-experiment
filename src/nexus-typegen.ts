@@ -46,6 +46,14 @@ export interface NexusGenObjects {
     user?: NexusGenRootTypes['User'] | null; // User
   }
   Link: prisma.Link;
+  LinkEdge: { // root type
+    cursor: string; // String!
+    node?: NexusGenRootTypes['Link'] | null; // Link
+  }
+  LinkVotes_Connection: { // root type
+    edges?: Array<NexusGenRootTypes['VoteEdge'] | null> | null; // [VoteEdge]
+    pageInfo: NexusGenRootTypes['PageInfo']; // PageInfo!
+  }
   Mutation: {};
   PageCursor: { // root type
     cursor: string; // String!
@@ -67,11 +75,11 @@ export interface NexusGenObjects {
   Query: {};
   Subscription: {};
   User: prisma.User;
-  Vote: prisma.Vote;
-  VoteConnection: { // root type
-    edges?: Array<NexusGenRootTypes['VoteEdge'] | null> | null; // [VoteEdge]
+  UserLinks_Connection: { // root type
+    edges?: Array<NexusGenRootTypes['LinkEdge'] | null> | null; // [LinkEdge]
     pageInfo: NexusGenRootTypes['PageInfo']; // PageInfo!
   }
+  Vote: prisma.Vote;
   VoteEdge: { // root type
     cursor: string; // String!
     node?: NexusGenRootTypes['Vote'] | null; // Vote
@@ -99,7 +107,16 @@ export interface NexusGenFieldTypes {
     id: string; // ID!
     postedBy: NexusGenRootTypes['User'] | null; // User
     url: string | null; // String
-    votes: NexusGenRootTypes['VoteConnection'] | null; // VoteConnection
+    votes: NexusGenRootTypes['LinkVotes_Connection'] | null; // LinkVotes_Connection
+  }
+  LinkEdge: { // field return type
+    cursor: string; // String!
+    node: NexusGenRootTypes['Link'] | null; // Link
+  }
+  LinkVotes_Connection: { // field return type
+    edges: Array<NexusGenRootTypes['VoteEdge'] | null> | null; // [VoteEdge]
+    pageCursors: NexusGenRootTypes['PageCursors'] | null; // PageCursors
+    pageInfo: NexusGenRootTypes['PageInfo']; // PageInfo!
   }
   Mutation: { // field return type
     addVote: NexusGenRootTypes['Vote'] | null; // Vote
@@ -138,17 +155,18 @@ export interface NexusGenFieldTypes {
   User: { // field return type
     email: string; // String!
     id: string; // ID!
-    links: NexusGenRootTypes['Link'][]; // [Link!]!
+    links: NexusGenRootTypes['UserLinks_Connection']; // UserLinks_Connection!
     name: string; // String!
+  }
+  UserLinks_Connection: { // field return type
+    edges: Array<NexusGenRootTypes['LinkEdge'] | null> | null; // [LinkEdge]
+    pageCursors: NexusGenRootTypes['PageCursors'] | null; // PageCursors
+    pageInfo: NexusGenRootTypes['PageInfo']; // PageInfo!
   }
   Vote: { // field return type
     id: string; // ID!
     link: NexusGenRootTypes['Link'] | null; // Link
     user: NexusGenRootTypes['User'] | null; // User
-  }
-  VoteConnection: { // field return type
-    edges: Array<NexusGenRootTypes['VoteEdge'] | null> | null; // [VoteEdge]
-    pageInfo: NexusGenRootTypes['PageInfo']; // PageInfo!
   }
   VoteEdge: { // field return type
     cursor: string; // String!
@@ -169,7 +187,16 @@ export interface NexusGenFieldTypeNames {
     id: 'ID'
     postedBy: 'User'
     url: 'String'
-    votes: 'VoteConnection'
+    votes: 'LinkVotes_Connection'
+  }
+  LinkEdge: { // field return type name
+    cursor: 'String'
+    node: 'Link'
+  }
+  LinkVotes_Connection: { // field return type name
+    edges: 'VoteEdge'
+    pageCursors: 'PageCursors'
+    pageInfo: 'PageInfo'
   }
   Mutation: { // field return type name
     addVote: 'Vote'
@@ -208,17 +235,18 @@ export interface NexusGenFieldTypeNames {
   User: { // field return type name
     email: 'String'
     id: 'ID'
-    links: 'Link'
+    links: 'UserLinks_Connection'
     name: 'String'
+  }
+  UserLinks_Connection: { // field return type name
+    edges: 'LinkEdge'
+    pageCursors: 'PageCursors'
+    pageInfo: 'PageInfo'
   }
   Vote: { // field return type name
     id: 'ID'
     link: 'Link'
     user: 'User'
-  }
-  VoteConnection: { // field return type name
-    edges: 'VoteEdge'
-    pageInfo: 'PageInfo'
   }
   VoteEdge: { // field return type name
     cursor: 'String'
@@ -270,6 +298,14 @@ export interface NexusGenArgTypes {
     }
     node: { // args
       id: string; // ID!
+    }
+  }
+  User: {
+    links: { // args
+      after?: string | null; // String
+      before?: string | null; // String
+      first?: number | null; // Int
+      last?: number | null; // Int
     }
   }
 }

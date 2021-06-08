@@ -15,7 +15,8 @@ import {
     getVotesForLink,
     updateLink,
 } from '../model';
-import { Link } from '../source-types';
+import { createConnection } from '../model/pagination';
+import { Link, Vote } from '../source-types';
 
 const subscriptionLabels = {
     newLink: 'NEW_LINK',
@@ -35,9 +36,14 @@ export const linkType = objectType({
         });
         t.connectionField('votes', {
             type: 'Vote',
+            extendConnection(t) {
+                t.field('pageCursors', {
+                    type: 'PageCursors',
+                });
+            },
             resolve: async (root, args, ctx) => {
-                const votes = await getVotesForLink(root.id, ctx.prisma);
-                return votes;
+                const data = await getVotesForLink(root.id, ctx.prisma);
+                return createConnection<Vote>(args, data);
             },
         });
     },

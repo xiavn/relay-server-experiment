@@ -24,7 +24,28 @@ type Link implements Node {
 
     """Returns the last n elements from the list."""
     last: Int
-  ): VoteConnection
+  ): LinkVotes_Connection
+}
+
+type LinkEdge {
+  """https://facebook.github.io/relay/graphql/connections.htm#sec-Cursor"""
+  cursor: String!
+
+  """https://facebook.github.io/relay/graphql/connections.htm#sec-Node"""
+  node: Link
+}
+
+type LinkVotes_Connection {
+  """
+  https://facebook.github.io/relay/graphql/connections.htm#sec-Edge-Types
+  """
+  edges: [VoteEdge]
+  pageCursors: PageCursors
+
+  """
+  https://facebook.github.io/relay/graphql/connections.htm#sec-undefined.PageInfo
+  """
+  pageInfo: PageInfo!
 }
 
 type Mutation {
@@ -101,26 +122,39 @@ type Subscription {
 type User implements Node {
   email: String!
   id: ID!
-  links: [Link!]!
+  links(
+    """Returns the elements in the list that come after the specified cursor"""
+    after: String
+
+    """Returns the elements in the list that come before the specified cursor"""
+    before: String
+
+    """Returns the first n elements from the list."""
+    first: Int
+
+    """Returns the last n elements from the list."""
+    last: Int
+  ): UserLinks_Connection!
   name: String!
+}
+
+type UserLinks_Connection {
+  """
+  https://facebook.github.io/relay/graphql/connections.htm#sec-Edge-Types
+  """
+  edges: [LinkEdge]
+  pageCursors: PageCursors
+
+  """
+  https://facebook.github.io/relay/graphql/connections.htm#sec-undefined.PageInfo
+  """
+  pageInfo: PageInfo!
 }
 
 type Vote implements Node {
   id: ID!
   link: Link
   user: User
-}
-
-type VoteConnection {
-  """
-  https://facebook.github.io/relay/graphql/connections.htm#sec-Edge-Types
-  """
-  edges: [VoteEdge]
-
-  """
-  https://facebook.github.io/relay/graphql/connections.htm#sec-undefined.PageInfo
-  """
-  pageInfo: PageInfo!
 }
 
 type VoteEdge {
