@@ -1,4 +1,4 @@
-import { toGlobalId } from 'graphql-relay';
+import { offsetToCursor, toGlobalId } from 'graphql-relay';
 import { typenameItem } from './utils';
 
 type NodeType = { id: string | number } & typenameItem;
@@ -72,14 +72,20 @@ const filterEdgesToAmount = <I extends NodeType>({
             throw new Error('$last should be a positive integer');
         }
         pageInfo.hasPreviousPage = filteredEdges.length > last;
-        return { edges: filteredEdges.slice(edges.length - last), pageInfo };
+        return {
+            edges:
+                filteredEdges.length > last
+                    ? filteredEdges.slice(edges.length - last)
+                    : filteredEdges,
+            pageInfo,
+        };
     }
     return { edges: filteredEdges, pageInfo };
 };
 
 const createEdges = <I extends NodeType>(data: I[]) =>
-    data.map((item) => ({
-        cursor: toGlobalId(item.__typename, String(item.id)),
+    data.map((item, i) => ({
+        cursor: offsetToCursor(i),
         node: item,
     }));
 
@@ -96,6 +102,7 @@ export const createConnection = <I extends NodeType>(
     return {
         edges: filteredEdges,
         pageCursors: {
+            totalRecords: 0,
             first: {
                 cursor: 'blah',
                 page: 1,
@@ -131,8 +138,10 @@ export const createConnection = <I extends NodeType>(
         },
         pageInfo: {
             ...pageInfo,
-            startCursor: filteredEdges[0].cursor,
-            endCursor: filteredEdges[filteredEdges.length - 1].cursor,
+            startCursor: filteredEdges.length ? filteredEdges[0].cursor : null,
+            endCursor: filteredEdges.length
+                ? filteredEdges[filteredEdges.length - 1].cursor
+                : null,
         },
     };
 };

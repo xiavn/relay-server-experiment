@@ -80,6 +80,7 @@ type PageCursors {
   """
   last: PageCursor
   previous: PageCursor
+  totalRecords: Int!
 }
 
 """

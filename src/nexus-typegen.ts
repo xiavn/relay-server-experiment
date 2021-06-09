@@ -65,6 +65,7 @@ export interface NexusGenObjects {
     first?: NexusGenRootTypes['PageCursor'] | null; // PageCursor
     last?: NexusGenRootTypes['PageCursor'] | null; // PageCursor
     previous?: NexusGenRootTypes['PageCursor'] | null; // PageCursor
+    totalRecords: number; // Int!
   }
   PageInfo: { // root type
     endCursor?: string | null; // String
@@ -135,6 +136,7 @@ export interface NexusGenFieldTypes {
     first: NexusGenRootTypes['PageCursor'] | null; // PageCursor
     last: NexusGenRootTypes['PageCursor'] | null; // PageCursor
     previous: NexusGenRootTypes['PageCursor'] | null; // PageCursor
+    totalRecords: number; // Int!
   }
   PageInfo: { // field return type
     endCursor: string | null; // String
@@ -215,6 +217,7 @@ export interface NexusGenFieldTypeNames {
     first: 'PageCursor'
     last: 'PageCursor'
     previous: 'PageCursor'
+    totalRecords: 'Int'
   }
   PageInfo: { // field return type name
     endCursor: 'String'

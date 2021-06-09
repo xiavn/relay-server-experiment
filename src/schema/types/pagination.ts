@@ -29,5 +29,6 @@ export const pageCursorsType = objectType({
         t.field('previous', {
             type: 'PageCursor',
         });
+        t.nonNull.int('totalRecords');
     },
 });
