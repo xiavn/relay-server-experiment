@@ -25,21 +25,27 @@ const filterEdgesToCursor = <I extends NodeType>({
     before,
     after,
 }: Omit<ProcessEdgesArguments<I>, 'first' | 'last'>) => {
+    const pageInfo = {
+        hasPreviousPage: false,
+        hasNextPage: false,
+    };
     if (after) {
         const afterEdgePosition = edges.findIndex(
             (edge) => edge.cursor === after,
         );
         const slicedEdges = edges.slice(afterEdgePosition + 1);
-        return slicedEdges;
+        pageInfo.hasPreviousPage = afterEdgePosition > 0;
+        return { edges: slicedEdges, pageInfo };
     }
     if (before) {
         const beforeEdgePosition = edges.findIndex(
             (edge) => edge.cursor === before,
         );
         const slicedEdges = edges.slice(0, beforeEdgePosition);
-        return slicedEdges;
+        pageInfo.hasNextPage = beforeEdgePosition < edges.length - 1;
+        return { edges: slicedEdges, pageInfo };
     }
-    return edges;
+    return { edges, pageInfo };
 };
 
 const filterEdgesToAmount = <I extends NodeType>({
@@ -49,34 +55,27 @@ const filterEdgesToAmount = <I extends NodeType>({
     after,
     before,
 }: ProcessEdgesArguments<I>) => {
-    const filteredEdges = filterEdgesToCursor<I>({ edges, after, before });
+    const { edges: filteredEdges, pageInfo } = filterEdgesToCursor<I>({
+        edges,
+        after,
+        before,
+    });
     if (first) {
         if (first < 0) {
             throw new Error('$first should be a positive integer');
         }
-        return filteredEdges.slice(0, first);
+        pageInfo.hasNextPage = filteredEdges.length > first;
+        return { edges: filteredEdges.slice(0, first), pageInfo };
     }
     if (last) {
         if (last < 0) {
             throw new Error('$last should be a positive integer');
         }
-        return filteredEdges.slice(edges.length - last);
+        pageInfo.hasPreviousPage = filteredEdges.length > last;
+        return { edges: filteredEdges.slice(edges.length - last), pageInfo };
     }
-    return filteredEdges;
+    return { edges: filteredEdges, pageInfo };
 };
-
-const generatePageInfo = <I extends NodeType>({
-    edges,
-    first,
-    last,
-    after,
-    before,
-}: ProcessEdgesArguments<I>) => ({
-    hasNextPage: false,
-    hasPreviousPage: false,
-    startCursor: 'blah',
-    endCursor: 'blah',
-});
 
 const createEdges = <I extends NodeType>(data: I[]) =>
     data.map((item) => ({
@@ -90,7 +89,10 @@ export const createConnection = <I extends NodeType>(
     // typename: I['__typename'],
 ) => {
     const edges = createEdges<I>(data);
-    const filteredEdges = filterEdgesToAmount<I>({ edges, ...args });
+    const { edges: filteredEdges, pageInfo } = filterEdgesToAmount<I>({
+        edges,
+        ...args,
+    });
     return {
         edges: filteredEdges,
         pageCursors: {
@@ -127,6 +129,10 @@ export const createConnection = <I extends NodeType>(
                 },
             ],
         },
-        pageInfo: generatePageInfo({ edges: filteredEdges, ...args }),
+        pageInfo: {
+            ...pageInfo,
+            startCursor: filteredEdges[0].cursor,
+            endCursor: filteredEdges[filteredEdges.length - 1].cursor,
+        },
     };
 };
