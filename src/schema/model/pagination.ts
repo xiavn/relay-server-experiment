@@ -92,7 +92,6 @@ const createEdges = <I extends NodeType>(data: I[]) =>
 export const createConnection = <I extends NodeType>(
     args: ConnectionArguments,
     data: I[],
-    // typename: I['__typename'],
 ) => {
     const edges = createEdges<I>(data);
     const { edges: filteredEdges, pageInfo } = filterEdgesToAmount<I>({
@@ -102,7 +101,7 @@ export const createConnection = <I extends NodeType>(
     return {
         edges: filteredEdges,
         pageCursors: {
-            totalRecords: 0,
+            totalRecords: edges.length,
             first: {
                 cursor: 'blah',
                 page: 1,
