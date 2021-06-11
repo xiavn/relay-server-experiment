@@ -128,6 +128,20 @@ const pageToCursor = (page: number, size: number) => {
     return offsetToCursor((page - 1) * size - 1);
 };
 
+const createPageCursor = ({
+    page,
+    currentPage,
+    pageSize,
+}: {
+    page: number;
+    currentPage: number;
+    pageSize: number;
+}) => ({
+    page,
+    isCurrent: currentPage === page,
+    cursor: pageToCursor(page, pageSize),
+});
+
 const createArrayOfPageCursors = ({
     start,
     end,
@@ -136,11 +150,13 @@ const createArrayOfPageCursors = ({
 }: CreateArrayOfPageCursorsArguments) => {
     const cursorArray = [];
     for (let page = start; page <= end; page++) {
-        cursorArray.push({
-            page,
-            isCurrent: currentPage === page,
-            cursor: pageToCursor(page, pageSize),
-        });
+        cursorArray.push(
+            createPageCursor({
+                page,
+                currentPage,
+                pageSize,
+            }),
+        );
     }
     return cursorArray;
 };
@@ -164,56 +180,76 @@ const createPageCursors = ({
     const totalPages = Math.ceil(totalRecords / pageSize);
     const pageCursors: NexusGenObjects['PageCursors'] = {
         totalRecords,
-        around: [],
+        around: createArrayOfPageCursors({
+            start: 1,
+            end: 1,
+            currentPage: 1,
+            pageSize,
+        }),
     };
     const currentPage = Math.ceil((offset + 1) / pageSize + 1);
-    console.log(currentPage, offset, pageSize);
+    const firstPage = createPageCursor({
+        page: 1,
+        currentPage,
+        pageSize,
+    });
+    const lastPage = createPageCursor({
+        page: totalPages,
+        currentPage,
+        pageSize,
+    });
     if (totalPages > 0) {
         if (totalPages <= maxPagesRequired) {
+            // All of the pages are visibile in pagination.
             pageCursors.around = createArrayOfPageCursors({
                 start: 1,
                 end: totalPages,
                 currentPage,
                 pageSize,
             });
+        } else if (currentPage <= Math.floor(maxPagesRequired / 2) + 1) {
+            // We are near the beginning so pagination will start at 1, but a jump is needed to the end.
+            pageCursors.around = createArrayOfPageCursors({
+                start: 1,
+                end: maxPagesRequired - 1,
+                currentPage,
+                pageSize,
+            });
+            pageCursors.last = lastPage;
+        } else if (
+            currentPage >=
+            totalPages - Math.floor(maxPagesRequired / 2)
+        ) {
+            // We are near the end of pagination, so we will have a jump from 1 and then the final page will be included in around.
+            pageCursors.first = firstPage;
+            pageCursors.around = createArrayOfPageCursors({
+                start: totalPages - maxPagesRequired + 2,
+                end: totalPages,
+                currentPage,
+                pageSize,
+            });
+        } else {
+            // We are in the "middle" and the first and last page will be seperate.
+            pageCursors.first = firstPage;
+            const pageOffset = Math.floor((maxPagesRequired - 3) / 2);
+            pageCursors.around = createArrayOfPageCursors({
+                start: currentPage - pageOffset,
+                end: currentPage + pageOffset,
+                currentPage,
+                pageSize,
+            });
+            pageCursors.last = lastPage;
+        }
+
+        if (currentPage > 1 && totalPages > 1) {
+            pageCursors.previous = createPageCursor({
+                page: currentPage - 1,
+                currentPage,
+                pageSize,
+            });
         }
     }
     return pageCursors;
-    return {
-        totalRecords,
-        first: {
-            cursor: 'blah',
-            page: 1,
-            isCurrent: false,
-        },
-        last: {
-            cursor: 'blah',
-            page: 1,
-            isCurrent: false,
-        },
-        previous: {
-            cursor: 'blah',
-            page: 1,
-            isCurrent: false,
-        },
-        around: [
-            {
-                cursor: 'blah',
-                page: 1,
-                isCurrent: false,
-            },
-            {
-                cursor: 'blah',
-                page: 1,
-                isCurrent: false,
-            },
-            {
-                cursor: 'blah',
-                page: 1,
-                isCurrent: false,
-            },
-        ],
-    };
 };
 
 export const createConnection = <I extends NodeType>(
