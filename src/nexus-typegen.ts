@@ -45,6 +45,7 @@ export interface NexusGenObjects {
     token?: string | null; // String
     user?: NexusGenRootTypes['User'] | null; // User
   }
+  Colour: prisma.Colour;
   Link: prisma.Link;
   LinkEdge: { // root type
     cursor: string; // String!
@@ -88,7 +89,7 @@ export interface NexusGenObjects {
 }
 
 export interface NexusGenInterfaces {
-  Node: core.Discriminate<'Link', 'required'> | core.Discriminate<'User', 'required'> | core.Discriminate<'Vote', 'required'>;
+  Node: core.Discriminate<'Colour', 'required'> | core.Discriminate<'Link', 'required'> | core.Discriminate<'User', 'required'> | core.Discriminate<'Vote', 'required'>;
 }
 
 export interface NexusGenUnions {
@@ -102,6 +103,13 @@ export interface NexusGenFieldTypes {
   AuthPayload: { // field return type
     token: string | null; // String
     user: NexusGenRootTypes['User'] | null; // User
+  }
+  Colour: { // field return type
+    hexValue: string; // String!
+    id: string; // ID!
+    name: string; // String!
+    pantoneValue: string; // String!
+    year: number; // Int!
   }
   Link: { // field return type
     description: string | null; // String
@@ -146,6 +154,7 @@ export interface NexusGenFieldTypes {
     startCursor: string | null; // String
   }
   Query: { // field return type
+    colours: Array<NexusGenRootTypes['Colour'] | null>; // [Colour]!
     feed: Array<NexusGenRootTypes['Link'] | null>; // [Link]!
     link: NexusGenRootTypes['Link'] | null; // Link
     login: NexusGenRootTypes['AuthPayload'] | null; // AuthPayload
@@ -184,6 +193,13 @@ export interface NexusGenFieldTypeNames {
   AuthPayload: { // field return type name
     token: 'String'
     user: 'User'
+  }
+  Colour: { // field return type name
+    hexValue: 'String'
+    id: 'ID'
+    name: 'String'
+    pantoneValue: 'String'
+    year: 'Int'
   }
   Link: { // field return type name
     description: 'String'
@@ -228,6 +244,7 @@ export interface NexusGenFieldTypeNames {
     startCursor: 'String'
   }
   Query: { // field return type name
+    colours: 'Colour'
     feed: 'Link'
     link: 'Link'
     login: 'AuthPayload'
@@ -316,10 +333,11 @@ export interface NexusGenArgTypes {
 }
 
 export interface NexusGenAbstractTypeMembers {
-  Node: "Link" | "User" | "Vote"
+  Node: "Colour" | "Link" | "User" | "Vote"
 }
 
 export interface NexusGenTypeInterfaces {
+  Colour: "Node"
   Link: "Node"
   User: "Node"
   Vote: "Node"

@@ -7,6 +7,14 @@ type AuthPayload {
   user: User
 }
 
+type Colour implements Node {
+  hexValue: String!
+  id: ID!
+  name: String!
+  pantoneValue: String!
+  year: Int!
+}
+
 type Link implements Node {
   description: String
   id: ID!
@@ -110,6 +118,7 @@ type PageInfo {
 }
 
 type Query {
+  colours: [Colour]!
   feed: [Link]!
   link(id: Int!): Link
   login(email: String!, password: String!): AuthPayload
