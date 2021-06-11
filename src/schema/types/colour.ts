@@ -5,6 +5,9 @@ export const colourType = objectType({
     name: 'Colour',
     definition(t) {
         t.implements('Node');
+        t.nonNull.int('localId', {
+            resolve: (source) => source.id,
+        });
         t.nonNull.string('name');
         t.nonNull.int('year');
         t.nonNull.string('hexValue', {

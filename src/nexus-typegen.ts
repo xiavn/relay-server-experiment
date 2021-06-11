@@ -107,6 +107,7 @@ export interface NexusGenFieldTypes {
   Colour: { // field return type
     hexValue: string; // String!
     id: string; // ID!
+    localId: number; // Int!
     name: string; // String!
     pantoneValue: string; // String!
     year: number; // Int!
@@ -166,6 +167,7 @@ export interface NexusGenFieldTypes {
   }
   User: { // field return type
     email: string; // String!
+    faveColour: NexusGenRootTypes['Colour']; // Colour!
     id: string; // ID!
     links: NexusGenRootTypes['UserLinks_Connection']; // UserLinks_Connection!
     name: string; // String!
@@ -197,6 +199,7 @@ export interface NexusGenFieldTypeNames {
   Colour: { // field return type name
     hexValue: 'String'
     id: 'ID'
+    localId: 'Int'
     name: 'String'
     pantoneValue: 'String'
     year: 'Int'
@@ -256,6 +259,7 @@ export interface NexusGenFieldTypeNames {
   }
   User: { // field return type name
     email: 'String'
+    faveColour: 'Colour'
     id: 'ID'
     links: 'UserLinks_Connection'
     name: 'String'

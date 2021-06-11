@@ -10,6 +10,7 @@ type AuthPayload {
 type Colour implements Node {
   hexValue: String!
   id: ID!
+  localId: Int!
   name: String!
   pantoneValue: String!
   year: Int!
@@ -132,6 +133,7 @@ type Subscription {
 
 type User implements Node {
   email: String!
+  faveColour: Colour!
   id: ID!
   links(
     """Returns the elements in the list that come after the specified cursor"""

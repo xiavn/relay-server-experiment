@@ -11,7 +11,7 @@ export const getColour = async (id: number) => {
 };
 
 export const getColours = async () => {
-    const req = await fetch(colourApi);
+    const req = await fetch(`${colourApi}?per_page=12`);
     const json = await req.json();
     return itemList<Colour>(json.data, 'Colour');
 };
