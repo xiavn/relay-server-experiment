@@ -26,6 +26,9 @@ export const linkType = objectType({
     name: 'Link',
     definition(t) {
         t.implements('Node');
+        t.nonNull.int('internalId', {
+            resolve: (source) => source.id,
+        });
         t.string('description');
         t.string('url');
         t.field('postedBy', {

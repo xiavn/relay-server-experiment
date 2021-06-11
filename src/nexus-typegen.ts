@@ -106,6 +106,7 @@ export interface NexusGenFieldTypes {
   Link: { // field return type
     description: string | null; // String
     id: string; // ID!
+    internalId: number; // Int!
     postedBy: NexusGenRootTypes['User'] | null; // User
     url: string | null; // String
     votes: NexusGenRootTypes['LinkVotes_Connection'] | null; // LinkVotes_Connection
@@ -187,6 +188,7 @@ export interface NexusGenFieldTypeNames {
   Link: { // field return type name
     description: 'String'
     id: 'ID'
+    internalId: 'Int'
     postedBy: 'User'
     url: 'String'
     votes: 'LinkVotes_Connection'
