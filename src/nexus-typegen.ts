@@ -133,6 +133,7 @@ export interface NexusGenFieldTypes {
     addVote: NexusGenRootTypes['Vote'] | null; // Vote
     createLink: NexusGenRootTypes['Link']; // Link!
     deleteLink: NexusGenRootTypes['Link']; // Link!
+    editUser: NexusGenRootTypes['User']; // User!
     signup: NexusGenRootTypes['AuthPayload'] | null; // AuthPayload
     updateLink: NexusGenRootTypes['Link']; // Link!
   }
@@ -225,6 +226,7 @@ export interface NexusGenFieldTypeNames {
     addVote: 'Vote'
     createLink: 'Link'
     deleteLink: 'Link'
+    editUser: 'User'
     signup: 'AuthPayload'
     updateLink: 'Link'
   }
@@ -303,8 +305,13 @@ export interface NexusGenArgTypes {
     deleteLink: { // args
       id: string; // ID!
     }
+    editUser: { // args
+      faveColour?: number | null; // Int
+      name?: string | null; // String
+    }
     signup: { // args
       email: string; // String!
+      faveColour?: number | null; // Int
       name: string; // String!
       password: string; // String!
     }

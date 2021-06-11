@@ -36,6 +36,7 @@ export const createUser = async (
     const user = await prisma.user.create({
         data: {
             ...newUser,
+            faveColour: newUser.faveColour ? newUser.faveColour : undefined,
             password,
         },
     });
@@ -56,5 +57,26 @@ export const loginUser = async (
     if (!valid) {
         throw new Error('Invalid password');
     }
+    return item<User>(user, 'User');
+};
+
+export const editUser = async (
+    {
+        userId,
+        name,
+        faveColour,
+    }: NexusGenArgTypes['Mutation']['editUser'] & { userId: number },
+    prisma: Prisma,
+) => {
+    const user = await prisma.user.update({
+        where: {
+            id: userId,
+        },
+        data: {
+            name: name ? name : undefined,
+            faveColour: faveColour ? faveColour : undefined,
+            id: userId,
+        },
+    });
     return item<User>(user, 'User');
 };

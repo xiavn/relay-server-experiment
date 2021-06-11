@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken';
-import { extendType, nonNull, objectType, stringArg } from 'nexus';
+import { extendType, intArg, nonNull, objectType, stringArg } from 'nexus';
 import { APP_SECRET } from 'src/utils';
 import { createUser, loginUser } from '../model';
 
@@ -22,6 +22,7 @@ export const authMutation = extendType({
                 email: nonNull(stringArg()),
                 password: nonNull(stringArg()),
                 name: nonNull(stringArg()),
+                faveColour: intArg(),
             },
             resolve: async (_root, args, ctx) => {
                 const user = await createUser(args, ctx.prisma);
