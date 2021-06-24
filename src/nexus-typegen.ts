@@ -75,6 +75,10 @@ export interface NexusGenObjects {
     startCursor?: string | null; // String
   }
   Query: {};
+  QueryLinks_Connection: { // root type
+    edges?: Array<NexusGenRootTypes['LinkEdge'] | null> | null; // [LinkEdge]
+    pageInfo: NexusGenRootTypes['PageInfo']; // PageInfo!
+  }
   Subscription: {};
   User: prisma.User;
   UserLinks_Connection: { // root type
@@ -159,8 +163,14 @@ export interface NexusGenFieldTypes {
     colours: Array<NexusGenRootTypes['Colour'] | null>; // [Colour]!
     feed: Array<NexusGenRootTypes['Link'] | null>; // [Link]!
     link: NexusGenRootTypes['Link'] | null; // Link
+    links: NexusGenRootTypes['QueryLinks_Connection'] | null; // QueryLinks_Connection
     login: NexusGenRootTypes['AuthPayload'] | null; // AuthPayload
     node: NexusGenRootTypes['Node'] | null; // Node
+  }
+  QueryLinks_Connection: { // field return type
+    edges: Array<NexusGenRootTypes['LinkEdge'] | null> | null; // [LinkEdge]
+    pageCursors: NexusGenRootTypes['PageCursors'] | null; // PageCursors
+    pageInfo: NexusGenRootTypes['PageInfo']; // PageInfo!
   }
   Subscription: { // field return type
     newLink: NexusGenRootTypes['Link'] | null; // Link
@@ -252,8 +262,14 @@ export interface NexusGenFieldTypeNames {
     colours: 'Colour'
     feed: 'Link'
     link: 'Link'
+    links: 'QueryLinks_Connection'
     login: 'AuthPayload'
     node: 'Node'
+  }
+  QueryLinks_Connection: { // field return type name
+    edges: 'LinkEdge'
+    pageCursors: 'PageCursors'
+    pageInfo: 'PageInfo'
   }
   Subscription: { // field return type name
     newLink: 'Link'
@@ -324,6 +340,12 @@ export interface NexusGenArgTypes {
   Query: {
     link: { // args
       id: number; // Int!
+    }
+    links: { // args
+      after?: string | null; // String
+      before?: string | null; // String
+      first?: number | null; // Int
+      last?: number | null; // Int
     }
     login: { // args
       email: string; // String!

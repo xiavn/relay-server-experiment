@@ -55,6 +55,21 @@ export const linkType = objectType({
 export const linkQuery = extendType({
     type: 'Query',
     definition(t) {
+        t.connectionField('links', {
+            type: 'Link',
+            extendConnection(t) {
+                t.field('pageCursors', {
+                    type: 'PageCursors',
+                });
+            },
+            resolve: async (_root, args, ctx) => {
+                const links = await ctx.prisma.link.findMany();
+                return createConnection<Link>(
+                    args,
+                    links.map((link) => ({ ...link, __typename: 'Link' })),
+                );
+            },
+        });
         t.nonNull.list.field('feed', {
             type: 'Link',
             resolve: async (_root, _args, ctx) => {
