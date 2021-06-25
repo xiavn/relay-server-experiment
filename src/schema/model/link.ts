@@ -13,6 +13,11 @@ export const getLink = async (id: number, prisma: Prisma) => {
     return itemOrNull<Link>(link, 'Link');
 };
 
+export const getLinks = async (prisma: Prisma) => {
+    const links = await prisma.link.findMany();
+    return itemList<Link>(links, 'Link');
+};
+
 export const getUserForLink = async (id: number, prisma: Prisma) => {
     const user = await prisma.link.findUnique({ where: { id } }).postedBy();
     return itemOrNull<User>(user, 'User');

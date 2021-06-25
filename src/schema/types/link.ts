@@ -11,6 +11,7 @@ import {
     createNewLink,
     deleteLink,
     getLink,
+    getLinks,
     getUserForLink,
     getVotesForLink,
     updateLink,
@@ -63,11 +64,8 @@ export const linkQuery = extendType({
                 });
             },
             resolve: async (_root, args, ctx) => {
-                const links = await ctx.prisma.link.findMany();
-                return createConnection<Link>(
-                    args,
-                    links.map((link) => ({ ...link, __typename: 'Link' })),
-                );
+                const links = await getLinks(ctx.prisma);
+                return createConnection<Link>(args, links);
             },
         });
         t.nonNull.list.field('feed', {
