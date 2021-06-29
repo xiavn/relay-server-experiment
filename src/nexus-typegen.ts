@@ -161,11 +161,12 @@ export interface NexusGenFieldTypes {
   }
   Query: { // field return type
     colours: Array<NexusGenRootTypes['Colour'] | null>; // [Colour]!
-    feed: Array<NexusGenRootTypes['Link'] | null>; // [Link]!
+    feed: NexusGenRootTypes['Link'][]; // [Link!]!
     link: NexusGenRootTypes['Link'] | null; // Link
     links: NexusGenRootTypes['QueryLinks_Connection'] | null; // QueryLinks_Connection
     login: NexusGenRootTypes['AuthPayload'] | null; // AuthPayload
     node: NexusGenRootTypes['Node'] | null; // Node
+    user: NexusGenRootTypes['User'] | null; // User
   }
   QueryLinks_Connection: { // field return type
     edges: Array<NexusGenRootTypes['LinkEdge'] | null> | null; // [LinkEdge]
@@ -265,6 +266,7 @@ export interface NexusGenFieldTypeNames {
     links: 'QueryLinks_Connection'
     login: 'AuthPayload'
     node: 'Node'
+    user: 'User'
   }
   QueryLinks_Connection: { // field return type name
     edges: 'LinkEdge'
@@ -353,6 +355,9 @@ export interface NexusGenArgTypes {
     }
     node: { // args
       id: string; // ID!
+    }
+    user: { // args
+      id: number; // Int!
     }
   }
   User: {

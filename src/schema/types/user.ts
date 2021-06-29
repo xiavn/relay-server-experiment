@@ -1,5 +1,5 @@
-import { extendType, intArg, objectType, stringArg } from 'nexus';
-import { editUser, getLinksForUser } from '../model';
+import { extendType, intArg, nonNull, objectType, stringArg } from 'nexus';
+import { editUser, getLinksForUser, getUser } from '../model';
 import { getColour } from '../model/colour';
 import { createConnection } from '../model/pagination';
 import { Link } from '../source-types';
@@ -27,6 +27,21 @@ export const userType = objectType({
             resolve: async (source, args, ctx) => {
                 const data = await getLinksForUser(source.id, ctx.prisma);
                 return createConnection<Link>(args, data);
+            },
+        });
+    },
+});
+
+export const userQuery = extendType({
+    type: 'Query',
+    definition(t) {
+        t.field('user', {
+            type: 'User',
+            args: {
+                id: nonNull(intArg()),
+            },
+            resolve: async (_root, args, ctx) => {
+                return await getUser(args.id, ctx.prisma);
             },
         });
     },

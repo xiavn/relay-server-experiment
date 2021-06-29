@@ -68,7 +68,7 @@ export const linkQuery = extendType({
                 return createConnection<Link>(args, links);
             },
         });
-        t.nonNull.list.field('feed', {
+        t.nonNull.list.nonNull.field('feed', {
             type: 'Link',
             resolve: async (_root, _args, ctx) => {
                 const links = await ctx.prisma.link.findMany();

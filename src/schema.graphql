@@ -121,7 +121,7 @@ type PageInfo {
 
 type Query {
   colours: [Colour]!
-  feed: [Link]!
+  feed: [Link!]!
   link(id: Int!): Link
   links(
     """Returns the elements in the list that come after the specified cursor"""
@@ -138,6 +138,7 @@ type Query {
   ): QueryLinks_Connection
   login(email: String!, password: String!): AuthPayload
   node(id: ID!): Node
+  user(id: Int!): User
 }
 
 type QueryLinks_Connection {
