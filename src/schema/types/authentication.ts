@@ -30,12 +30,6 @@ export const authMutation = extendType({
                 return { token, user };
             },
         });
-    },
-});
-
-export const authQuery = extendType({
-    type: 'Query',
-    definition(t) {
         t.field('login', {
             type: 'AuthPayload',
             args: {

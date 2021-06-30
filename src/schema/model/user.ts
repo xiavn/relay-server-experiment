@@ -44,7 +44,7 @@ export const createUser = async (
 };
 
 export const loginUser = async (
-    userArgs: NexusGenArgTypes['Query']['login'],
+    userArgs: NexusGenArgTypes['Mutation']['login'],
     prisma: Prisma,
 ) => {
     const user = await prisma.user.findUnique({

@@ -63,6 +63,7 @@ type Mutation {
   createLink(description: String!, url: String!): Link!
   deleteLink(id: ID!): Link!
   editUser(faveColour: Int, name: String): User!
+  login(email: String!, password: String!): AuthPayload
   signup(email: String!, faveColour: Int, name: String!, password: String!): AuthPayload
   updateLink(description: String, id: ID!, url: String): Link!
 }
@@ -136,7 +137,6 @@ type Query {
     """Returns the last n elements from the list."""
     last: Int
   ): QueryLinks_Connection
-  login(email: String!, password: String!): AuthPayload
   node(id: ID!): Node
   user(id: Int!): User
 }

@@ -138,6 +138,7 @@ export interface NexusGenFieldTypes {
     createLink: NexusGenRootTypes['Link']; // Link!
     deleteLink: NexusGenRootTypes['Link']; // Link!
     editUser: NexusGenRootTypes['User']; // User!
+    login: NexusGenRootTypes['AuthPayload'] | null; // AuthPayload
     signup: NexusGenRootTypes['AuthPayload'] | null; // AuthPayload
     updateLink: NexusGenRootTypes['Link']; // Link!
   }
@@ -164,7 +165,6 @@ export interface NexusGenFieldTypes {
     feed: NexusGenRootTypes['Link'][]; // [Link!]!
     link: NexusGenRootTypes['Link'] | null; // Link
     links: NexusGenRootTypes['QueryLinks_Connection'] | null; // QueryLinks_Connection
-    login: NexusGenRootTypes['AuthPayload'] | null; // AuthPayload
     node: NexusGenRootTypes['Node'] | null; // Node
     user: NexusGenRootTypes['User'] | null; // User
   }
@@ -238,6 +238,7 @@ export interface NexusGenFieldTypeNames {
     createLink: 'Link'
     deleteLink: 'Link'
     editUser: 'User'
+    login: 'AuthPayload'
     signup: 'AuthPayload'
     updateLink: 'Link'
   }
@@ -264,7 +265,6 @@ export interface NexusGenFieldTypeNames {
     feed: 'Link'
     link: 'Link'
     links: 'QueryLinks_Connection'
-    login: 'AuthPayload'
     node: 'Node'
     user: 'User'
   }
@@ -327,6 +327,10 @@ export interface NexusGenArgTypes {
       faveColour?: number | null; // Int
       name?: string | null; // String
     }
+    login: { // args
+      email: string; // String!
+      password: string; // String!
+    }
     signup: { // args
       email: string; // String!
       faveColour?: number | null; // Int
@@ -348,10 +352,6 @@ export interface NexusGenArgTypes {
       before?: string | null; // String
       first?: number | null; // Int
       last?: number | null; // Int
-    }
-    login: { // args
-      email: string; // String!
-      password: string; // String!
     }
     node: { // args
       id: string; // ID!
