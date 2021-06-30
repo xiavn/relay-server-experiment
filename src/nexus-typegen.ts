@@ -162,6 +162,7 @@ export interface NexusGenFieldTypes {
   }
   Query: { // field return type
     colours: Array<NexusGenRootTypes['Colour'] | null>; // [Colour]!
+    currentUser: NexusGenRootTypes['AuthPayload'] | null; // AuthPayload
     feed: NexusGenRootTypes['Link'][]; // [Link!]!
     link: NexusGenRootTypes['Link'] | null; // Link
     links: NexusGenRootTypes['QueryLinks_Connection'] | null; // QueryLinks_Connection
@@ -262,6 +263,7 @@ export interface NexusGenFieldTypeNames {
   }
   Query: { // field return type name
     colours: 'Colour'
+    currentUser: 'AuthPayload'
     feed: 'Link'
     link: 'Link'
     links: 'QueryLinks_Connection'

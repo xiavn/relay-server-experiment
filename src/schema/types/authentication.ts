@@ -1,7 +1,14 @@
 import jwt from 'jsonwebtoken';
 import { extendType, intArg, nonNull, objectType, stringArg } from 'nexus';
 import { APP_SECRET } from 'src/utils';
-import { createUser, loginUser } from '../model';
+import {
+    createNewUserPayload,
+    createUser,
+    getCurrentUserPayload,
+    getUser,
+    loginUser,
+    loginUserPayload,
+} from '../model';
 
 export const authPayloadType = objectType({
     name: 'AuthPayload',
@@ -10,6 +17,18 @@ export const authPayloadType = objectType({
             t.field('user', {
                 type: 'User',
             });
+    },
+});
+
+export const authQuery = extendType({
+    type: 'Query',
+    definition(t) {
+        t.field('currentUser', {
+            type: 'AuthPayload',
+            resolve: async (_root, _args, ctx) => {
+                return await getCurrentUserPayload(ctx.userId, ctx.prisma);
+            },
+        });
     },
 });
 
@@ -25,9 +44,7 @@ export const authMutation = extendType({
                 faveColour: intArg(),
             },
             resolve: async (_root, args, ctx) => {
-                const user = await createUser(args, ctx.prisma);
-                const token = jwt.sign({ userId: user.id }, APP_SECRET);
-                return { token, user };
+                return await createNewUserPayload(args, ctx.prisma);
             },
         });
         t.field('login', {
@@ -37,12 +54,7 @@ export const authMutation = extendType({
                 password: nonNull(stringArg()),
             },
             resolve: async (_root, args, ctx) => {
-                const user = await loginUser(args, ctx.prisma);
-                const token = jwt.sign({ userId: user.id }, APP_SECRET);
-                return {
-                    token,
-                    user,
-                };
+                return await loginUserPayload(args, ctx.prisma);
             },
         });
     },

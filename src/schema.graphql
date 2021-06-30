@@ -122,6 +122,7 @@ type PageInfo {
 
 type Query {
   colours: [Colour]!
+  currentUser: AuthPayload
   feed: [Link!]!
   link(id: Int!): Link
   links(
