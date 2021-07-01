@@ -1,12 +1,7 @@
-import jwt from 'jsonwebtoken';
 import { extendType, intArg, nonNull, objectType, stringArg } from 'nexus';
-import { APP_SECRET } from 'src/utils';
 import {
     createNewUserPayload,
-    createUser,
-    getCurrentUserPayload,
-    getUser,
-    loginUser,
+    getCurrentUserAuthPayload,
     loginUserPayload,
 } from '../model';
 
@@ -26,7 +21,7 @@ export const authQuery = extendType({
         t.field('currentUser', {
             type: 'AuthPayload',
             resolve: async (_root, _args, ctx) => {
-                return await getCurrentUserPayload(ctx.userId, ctx.prisma);
+                return await getCurrentUserAuthPayload(ctx.userId, ctx.prisma);
             },
         });
     },
