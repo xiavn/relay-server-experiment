@@ -56,6 +56,10 @@ export interface NexusGenObjects {
     pageInfo: NexusGenRootTypes['PageInfo']; // PageInfo!
   }
   Mutation: {};
+  NewLink: { // root type
+    feed: NexusGenRootTypes['Link'][]; // [Link!]!
+    item: NexusGenRootTypes['Link']; // Link!
+  }
   PageCursor: { // root type
     cursor: string; // String!
     isCurrent: boolean; // Boolean!
@@ -135,12 +139,16 @@ export interface NexusGenFieldTypes {
   }
   Mutation: { // field return type
     addVote: NexusGenRootTypes['Vote'] | null; // Vote
-    createLink: NexusGenRootTypes['Link']; // Link!
+    createLink: NexusGenRootTypes['NewLink']; // NewLink!
     deleteLink: NexusGenRootTypes['Link']; // Link!
     editUser: NexusGenRootTypes['User']; // User!
     login: NexusGenRootTypes['AuthPayload'] | null; // AuthPayload
     signup: NexusGenRootTypes['AuthPayload'] | null; // AuthPayload
     updateLink: NexusGenRootTypes['Link']; // Link!
+  }
+  NewLink: { // field return type
+    feed: NexusGenRootTypes['Link'][]; // [Link!]!
+    item: NexusGenRootTypes['Link']; // Link!
   }
   PageCursor: { // field return type
     cursor: string; // String!
@@ -236,12 +244,16 @@ export interface NexusGenFieldTypeNames {
   }
   Mutation: { // field return type name
     addVote: 'Vote'
-    createLink: 'Link'
+    createLink: 'NewLink'
     deleteLink: 'Link'
     editUser: 'User'
     login: 'AuthPayload'
     signup: 'AuthPayload'
     updateLink: 'Link'
+  }
+  NewLink: { // field return type name
+    feed: 'Link'
+    item: 'Link'
   }
   PageCursor: { // field return type name
     cursor: 'String'

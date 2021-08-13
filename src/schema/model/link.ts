@@ -38,7 +38,8 @@ export const createNewLink = async (
             postedBy: { connect: { id: userId } },
         },
     });
-    return item<Link>(newLink, 'Link');
+    const feed = await getLinks(prisma);
+    return { item: item<Link>(newLink, 'Link'), feed };
 };
 
 type UpdateLinkArguments = Omit<

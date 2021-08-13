@@ -53,6 +53,14 @@ export const linkType = objectType({
     },
 });
 
+export const newLinkReturnType = objectType({
+    name: 'NewLink',
+    definition(t) {
+        t.nonNull.field('item', { type: 'Link' });
+        t.nonNull.list.nonNull.field('feed', { type: 'Link' });
+    },
+});
+
 export const linkQuery = extendType({
     type: 'Query',
     definition(t) {
@@ -91,7 +99,7 @@ export const linkMutation = extendType({
     type: 'Mutation',
     definition(t) {
         t.nonNull.field('createLink', {
-            type: 'Link',
+            type: 'NewLink',
             args: {
                 url: nonNull(stringArg()),
                 description: nonNull(stringArg()),
@@ -107,7 +115,7 @@ export const linkMutation = extendType({
                     { userId, ...args },
                     ctx.prisma,
                 );
-                ctx.pubsub.publish(subscriptionLabels.newLink, newLink);
+                ctx.pubsub.publish(subscriptionLabels.newLink, newLink.item);
                 return newLink;
             },
         });
