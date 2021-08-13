@@ -3,6 +3,7 @@ schema: 'src/schema/index.ts'
 documents: null
 require:
     - ts-node/register
+    - tsconfig-paths/register
 generates:
     src/generated/graphql.ts:
         config:
