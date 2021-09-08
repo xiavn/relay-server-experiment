@@ -1,5 +1,6 @@
 import { ApolloServer } from 'apollo-server';
-import schema, { contextFunction } from './schema';
+import schema, { contextFunction, Context } from './schema';
+export { Context };
 
 const server = new ApolloServer({
     schema,

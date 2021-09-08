@@ -1,5 +1,5 @@
 import schema from './schema';
-import { contextFunction } from './context';
+import { contextFunction, Context } from './context';
 
-export { contextFunction };
+export { contextFunction, Context };
 export default schema;
